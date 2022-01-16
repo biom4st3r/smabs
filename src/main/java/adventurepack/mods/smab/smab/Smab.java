@@ -4,12 +4,18 @@ import java.util.Random;
 
 import com.google.common.base.Preconditions;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public final class Smab {
+    /**
+     * Access to this should done through getters
+     */
     private final SmabSpecies type;
     private final DNA dna;
     private int happiness;
+
+    private static LevelAlgorithm STAT = exp -> (int)exp/100;
     private int individual_intelligence;
     private int individual_strength;
     private int individual_dexterity;
@@ -34,6 +40,7 @@ public final class Smab {
         this.dna = dna;
         this.type = species;
         this.happiness = happiness;
+        // TODO Handle max individual stats
         this.individual_vitality = individual_vitality;
         this.individual_dexterity = individual_dexterity;
         this.individual_intelligence = individual_intelligence;
@@ -61,19 +68,19 @@ public final class Smab {
     }
 
     public int getIntelligence() {
-        return dna.intelligence() + type.base_intelligence() + individual_intelligence;
+        return dna.intelligence() + type.base_intelligence() + STAT.getLevel(individual_intelligence);
     }
 
     public int getStrength() {
-        return dna.strength() + type.base_strength() + individual_strength;
+        return dna.strength() + type.base_strength() + STAT.getLevel(individual_strength);
     }
 
     public int getDexterity() {
-        return dna.dexterity() + type.base_dexterity() + individual_dexterity;
+        return dna.dexterity() + type.base_dexterity() + STAT.getLevel(individual_dexterity);
     }
 
     public int getVitality() {
-        return dna.vitality() + type.base_vitality() + individual_vitality;
+        return dna.vitality() + type.base_vitality() + STAT.getLevel(individual_vitality);
     }
 
     public int getHappiness() {
@@ -122,4 +129,24 @@ public final class Smab {
     public String getNickname() {
         return this.nickname;
     }
+
+    public void feed(Item item) {
+        DietaryEffect effect = this.type.diet().getOrDefault(item, DietaryEffect.ZERO);
+        this.individual_vitality += effect.vitality();
+        this.individual_strength += effect.strength();
+        this.individual_intelligence += effect.intelligence();
+        this.individual_dexterity += effect.dexterity();
+    }
+
+    public Item[] getFoods() {
+        return this.type.diet().keySet().toArray(Item[]::new);
+    }
+
+    public boolean hasTag(Tag t) {
+        return this.type.tags().contains(t);
+    }
+
+    // public SmabSpecies getSpecies() {
+    //     return this.type;
+    // }
 }
