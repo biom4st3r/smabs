@@ -12,7 +12,7 @@ public abstract class SmabEntity extends TameableEntity {
 
     protected SmabEntity(EntityType<? extends TameableEntity> entityType, World world, SmabSpecies type) {
         super(entityType, world);
-        this.smab = null;
+        this.smab = null; // TODO
     }
 
     public final Smab smab;

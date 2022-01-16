@@ -2,6 +2,8 @@ package adventurepack.mods.smab.smab;
 
 import java.util.Random;
 
+import com.google.common.base.Preconditions;
+
 import net.minecraft.item.ItemStack;
 
 public final class Smab {
@@ -24,6 +26,11 @@ public final class Smab {
             int individual_intelligence, int individual_strength,
             int individual_dexterity, int individual_vitality,
             int experience, int ability_index, ItemStack heldItem, String nickname) {
+
+        Preconditions.checkNotNull(species);
+        Preconditions.checkNotNull(dna);
+        Preconditions.checkNotNull(heldItem);
+        Preconditions.checkNotNull(nickname);
         this.dna = dna;
         this.type = species;
         this.happiness = happiness;
@@ -31,7 +38,6 @@ public final class Smab {
         this.individual_dexterity = individual_dexterity;
         this.individual_intelligence = individual_intelligence;
         this.individual_strength = individual_strength;
-        // this.level = level;
         this.experience = experience;
         this.ability_index = ability_index;
         this.heldItem = heldItem;
@@ -41,7 +47,6 @@ public final class Smab {
     private static int getRandomAbility(SmabSpecies species) {
         return species.abilities().length == 0 ? -1 : new Random().nextInt(species.abilities().length);
     }
-
 
     public Smab(SmabSpecies species) {
         this(species, DNA.getRandom(), ItemStack.EMPTY,"");
@@ -98,6 +103,7 @@ public final class Smab {
     }
 
     public int getLevel() {
+        // TODO Should probably cap this?
         return this.type.algo().getLevel(this.experience);
     }
 
