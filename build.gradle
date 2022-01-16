@@ -1,0 +1,106 @@
+plugins {
+	id 'fabric-loom' version '0.10-SNAPSHOT'
+	id 'maven-publish'
+	id 'io.github.juuxel.loom-quiltflower-mini' version '1.0.0'
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+	maven {
+		name 'Biow0rks'
+		url "https://gitlab.com/api/v4/projects/29859041/packages/maven"
+	}
+	maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+}
+
+loom {
+	// accessWidenerPath = file("src/main/resources/widenme.baby")
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.minecraft_version}+${project.yarn_mappings}"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	//https://github.com/OnyxStudios/Cardinal-Components-API
+	//https://github.com/CottonMC/Cotton/wiki
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	modImplementation "biom4st3r.libs.biow0rks:reflection:${project.biow0rks_reflection}"
+	include "biom4st3r.libs.biow0rks:reflection:${project.biow0rks_reflection}"
+	modImplementation "biom4st3r.libs.biow0rks:base:${project.biow0rks_base}"
+	include "biom4st3r.libs.biow0rks:base:${project.biow0rks_base}"
+
+}
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	// ensure that the encoding is set to UTF-8, no matter what the system default is
+	// this fixes some edge cases with special characters not displaying correctly
+	// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+	// If Javadoc is generated, this must be specified in that task too.
+	it.options.encoding = "UTF-8"
+
+	// Minecraft 1.17 (21w19a) upwards uses Java 16.
+	it.options.release = 16
+}
+
+java {
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	withSourcesJar()
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
+}
+
+publishing {
+	// Declare all publications
+	publications {
+		mavenJava(MavenPublication) {
+			// Main
+			artifact(remapJar) { builtBy remapJar }
+			// Sources
+			artifact(sourcesJar) { builtBy remapSourcesJar }
+		}
+	}
+
+	// Add repositories to publish to
+	repositories {
+		// GitHub Packages (https://pkg.github.com)
+		
+		maven {
+			name 'GitLab'
+			// url "https://gitlab.com/api/v4/projects/{projectid}/packages/maven"
+			// artifactUrls "https://gitlab.com/api/v4/projects/{projectid}/packages"
+			url "SOME_URL/maven"
+			artifactUrls "SOME_URL/packages"
+			credentials(HttpHeaderCredentials) {
+				name = "Private-Token"
+				value = System.getenv('GITLAB_TOKEN')
+			}
+			authentication {
+				header(HttpHeaderAuthentication)
+			}
+		}
+	}
+}
+tasks.publish.dependsOn tasks.build
+tasks.publishToMavenLocal.dependsOn tasks.build

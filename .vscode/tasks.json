@@ -1,0 +1,63 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Kill Gradlew",
+            "type": "shell",
+            "command": ".\\gradlew --stop", 
+            "problemMatcher": []
+        },
+        {
+            "label": "Update Dependancies",
+            "type": "shell",
+            "command": ".\\gradlew",
+            "problemMatcher": []
+        },
+        {
+            "label": "Informative Update Dependancies",
+            "type": "shell",
+            "command": ".\\gradlew",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": ".\\gradlew build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Open Compiles",
+            "type": "shell",
+            "command": "start .\\build\\libs"
+        },
+        {
+            "label": "Clean Loom",
+            "type": "shell",
+            "command": ".\\gradlew cleanLoomBinaries",
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate sources",
+            "type": "shell",
+            "command": ".\\gradlew genSources",
+            "problemMatcher": []
+        },
+        {
+            "label": "Make Launch.json",
+            "type": "shell",
+            "command": ".\\gradlew vscode",
+            "problemMatcher": []
+        },
+        {
+            "label": "Fetch new Properties",
+            "type": "shell",
+            "command": "python .\\properties_updater.py",
+            "problemMatcher": []
+        }
+    ]
+}

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "smab",
+  "version": "${version}",
+
+  "name": "smab",
+  "description": "smab",
+  "authors": [
+    "Adventure Pack Team",
+    "SattesKrokodil",
+    "Biom4st3r"
+  ],
+  "contact": {
+    "homepage": "https://github.com/biom4st3r",
+    "sources": "https://github.com/biom4st3r"
+  },
+
+  "license": "AAR",
+  "icon": "assets/modid/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "adventurepack.mods.smab.ModInit"
+    ],
+    "client": [
+      "adventurepack.mods.smab.ModInitClient"
+    ]
+  },
+  "mixins": [
+    "smab.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

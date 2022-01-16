@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "adventurepack.mods.smab.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
