@@ -19,6 +19,7 @@ import biom4st3r.libs.biow0rks.NoEx;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public class DefaultAutoJson extends AutoJson {
+    
     public AutoJsonSerialize getOrDefault(RecordComponent component) {
         if (component.getAnnotation(AutoJsonSerialize.class) == null) {
             return DEFAULT_HINTS;

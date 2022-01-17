@@ -18,18 +18,19 @@ import net.minecraft.util.Util;
 public final class Smabs {
     public static final SmabBundle MISSINGNO = SmabBundle.create(
             new SmabSpecies(
-                new Identifier(ModInit.MODID, "missingno"), 
+                new Identifier(ModInit.MODID, "missingno"),
                 0,
                 0,
                 0,
                 0,
                 new Ability[0], 
-                LevelAlgorithm.STRAIGHT_LOG, 
+                LevelAlgorithm.STRAIGHT_LOG,
                 Util.make(Maps.newHashMap(), map -> {
                     map.put(Items.DIAMOND, new DietaryEffect(-5,0,0,5));
-                }), 
+                }),
                 Tag.create()
             ),
             FabricEntityTypeBuilder.<SmabEntity>createMob().spawnGroup(SpawnGroup.CREATURE)
         );
+    public static void classLoad() {}
 }

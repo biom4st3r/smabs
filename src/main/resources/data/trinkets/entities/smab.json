@@ -1,0 +1,8 @@
+{
+    "entities": [
+        "player"
+    ],
+    "slots": [
+        "smab_group/smab_slot"
+    ]
+}

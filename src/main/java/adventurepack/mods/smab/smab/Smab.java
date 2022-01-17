@@ -16,6 +16,10 @@ public final class Smab {
     private int happiness;
 
     private static LevelAlgorithm STAT = exp -> (int)exp/100;
+    private static final int MAX_INDIVIDUAL_STAT = 31 * 100;
+    private static final int MAX_HAPPINESS = 10;
+    private static final int MAX_LEVEL = 33;
+
     private int individual_intelligence;
     private int individual_strength;
     private int individual_dexterity;
@@ -68,19 +72,19 @@ public final class Smab {
     }
 
     public int getIntelligence() {
-        return dna.intelligence() + type.base_intelligence() + STAT.getLevel(individual_intelligence);
+        return dna.intelligence() + (int)(type.base_intelligence() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_intelligence);
     }
 
     public int getStrength() {
-        return dna.strength() + type.base_strength() + STAT.getLevel(individual_strength);
+        return dna.strength() + (int)(type.base_strength() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_strength);
     }
 
     public int getDexterity() {
-        return dna.dexterity() + type.base_dexterity() + STAT.getLevel(individual_dexterity);
+        return dna.dexterity() + (int)(type.base_dexterity() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_dexterity);
     }
 
     public int getVitality() {
-        return dna.vitality() + type.base_vitality() + STAT.getLevel(individual_vitality);
+        return dna.vitality() + (int)(type.base_vitality() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_vitality);
     }
 
     public int getHappiness() {
@@ -115,7 +119,11 @@ public final class Smab {
     }
 
     public void addExperience(int exp) {
-        this.experience += exp;
+        if (exp > 0 && this.getLevel() >= MAX_LEVEL) {
+
+        } else {
+            this.experience += exp;
+        }
     }
 
     public void removeExperience(int exp) {
@@ -130,12 +138,28 @@ public final class Smab {
         return this.nickname;
     }
 
+    private void addToVitality(int i) {
+        this.individual_vitality = Math.max(Math.min(this.individual_vitality + i, MAX_INDIVIDUAL_STAT), 0);
+    }
+    private void addToStrength(int i) {
+        this.individual_strength += Math.max(Math.min(this.individual_vitality + i, MAX_INDIVIDUAL_STAT), 0);
+    }
+    private void addToIntelligence(int i) {
+        this.individual_intelligence += Math.max(Math.min(this.individual_vitality + i, MAX_INDIVIDUAL_STAT), 0);
+    }
+    private void addToDexterity(int i) {
+        this.individual_dexterity += Math.max(Math.min(this.individual_vitality + i, MAX_INDIVIDUAL_STAT), 0);
+    }
+    public void addToHappiness(int i) {
+        this.happiness = Math.max(Math.min(this.happiness + i, MAX_HAPPINESS), 0);
+    }
+
     public void feed(Item item) {
         DietaryEffect effect = this.type.diet().getOrDefault(item, DietaryEffect.ZERO);
-        this.individual_vitality += effect.vitality();
-        this.individual_strength += effect.strength();
-        this.individual_intelligence += effect.intelligence();
-        this.individual_dexterity += effect.dexterity();
+        addToVitality(effect.vitality());
+        addToStrength(effect.strength());
+        addToIntelligence(effect.intelligence());
+        addToDexterity(effect.dexterity());
     }
 
     public Item[] getFoods() {

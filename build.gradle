@@ -69,6 +69,8 @@ dependencies {
 
 	modImplementation "software.bernie.geckolib:geckolib-fabric-1.18:${project.gecko_lib}"
 
+	modImplementation "dev.emi:trinkets:${trinkets_version}"
+
     modCompileOnly "com.github.apace100:origins-fabric:${project.origins_version}"
     modRuntimeOnly "com.github.apace100:origins-fabric:${project.origins_version}"
 	
