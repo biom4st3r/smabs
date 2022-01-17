@@ -145,8 +145,4 @@ public final class Smab {
     public boolean hasTag(Tag t) {
         return this.type.tags().contains(t);
     }
-
-    // public SmabSpecies getSpecies() {
-    //     return this.type;
-    // }
 }

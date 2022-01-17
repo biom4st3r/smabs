@@ -19,6 +19,35 @@ repositories {
 	maven {
       url "https://plugins.gradle.org/m2/"
     }
+    maven {
+        name = "Ladysnake Libs"
+        url = 'https://ladysnake.jfrog.io/artifactory/mods'
+    }
+    maven {
+        url = 'https://maven.cafeteria.dev'
+        content {
+            includeGroup 'net.adriantodt.fabricmc'
+        }
+    }
+    maven {
+        url "https://maven.jamieswhiteshirt.com/libs-release"
+        content {
+            includeGroup "com.jamieswhiteshirt"
+        }
+    }
+    maven {
+        url "https://jitpack.io"
+    }
+    maven {
+        url "https://maven.shedaniel.me/"
+    }
+    maven {
+        url "https://maven.terraformersmc.com/"
+    }
+	maven { 
+		name "GeckoLib"
+		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+		}
 }
 
 loom {
@@ -37,6 +66,12 @@ dependencies {
 	include "biom4st3r.libs.biow0rks:reflection:${project.biow0rks_reflection}"
 	modImplementation "biom4st3r.libs.biow0rks:base:${project.biow0rks_base}"
 	include "biom4st3r.libs.biow0rks:base:${project.biow0rks_base}"
+
+	modImplementation "software.bernie.geckolib:geckolib-fabric-1.18:${project.gecko_lib}"
+
+    modCompileOnly "com.github.apace100:origins-fabric:${project.origins_version}"
+    modRuntimeOnly "com.github.apace100:origins-fabric:${project.origins_version}"
+	
 
 }
 processResources {

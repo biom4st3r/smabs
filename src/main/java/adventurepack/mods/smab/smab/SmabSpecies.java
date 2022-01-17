@@ -5,10 +5,11 @@ import java.util.Set;
 
 import net.minecraft.item.Item;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Identifier;
 
 public record SmabSpecies(
-        Text name,
-        Text lore,
+        Identifier id,
         int base_intelligence, 
         int base_strength, 
         int base_dexterity, 
@@ -21,4 +22,11 @@ public record SmabSpecies(
          */
         Set<Tag> tags
         ) {
+
+        public Text name() {
+                return new TranslatableText(String.format("%s.smab.name.%s", this.id().getNamespace(),this.id().getPath()));
+        }
+        public Text lore() {
+                return new TranslatableText(String.format("%s.smab.lore.%s", this.id().getNamespace(),this.id().getPath()));
+        }
 }
