@@ -1,6 +1,7 @@
 package adventurepack.mods.smab.smab;
 
 import adventurepack.mods.smab.ModInit;
+import adventurepack.mods.smab.Registries;
 import adventurepack.mods.smab.minecraft.entity.SmabEntity;
 import adventurepack.mods.smab.minecraft.entity.SmabEntityModel;
 import adventurepack.mods.smab.minecraft.entity.SmabEntityRenderer;
@@ -25,6 +26,7 @@ public record SmabBundle(SmabSpecies species, EntityType<SmabEntity> type, Item 
             EntityRendererRegistry.register(type, ctx -> new SmabEntityRenderer(ctx,new SmabEntityModel(species)));
         }
         Registry.register(Registry.ITEM, species().id(), item);
+        Registries.SMABS.put(species().id(), this);
     }
 
     public SmabBundle(SmabSpecies species, FabricEntityTypeBuilder<SmabEntity> builder, Item.Settings settings) {
