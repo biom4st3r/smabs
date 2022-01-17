@@ -28,7 +28,8 @@ public final class Smabs {
                 Util.make(Maps.newHashMap(), map -> {
                     map.put(Items.DIAMOND, new DietaryEffect(-5,0,0,5));
                 }),
-                Tag.create()
+                Tag.create(),
+                false
             ),
             FabricEntityTypeBuilder.<SmabEntity>createMob().spawnGroup(SpawnGroup.CREATURE)
         );

@@ -1,5 +1,11 @@
 https://hackmd.io/rYPFfRjCSEiw8x7PL-1Eww?view
 
+## Loading Smabs from json
+
+`/config/smab/` directory will attempt to load all jsons into smabs and register them.
+
+Registering a smab will automatically create: SmabSpecies, SmabItem, and an EntityType(if hasEntity is true) for the smab.
+
 
 SmabSpecies Format
 ```json5
@@ -33,8 +39,8 @@ SmabSpecies Format
         }
     ],
     "tags":{ // Currently unused
-
-    }
+    },
+    "hasEntity":false
 }
 ```
 
