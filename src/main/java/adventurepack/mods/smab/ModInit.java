@@ -6,8 +6,10 @@ import adventurepack.mods.smab.smab.Ability;
 import adventurepack.mods.smab.smab.LevelAlgorithm;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class ModInit implements ModInitializer {
 
@@ -19,6 +21,7 @@ public class ModInit implements ModInitializer {
 		Smabs.classLoad();
 		AutoJson.INSTANCE.register(LevelAlgorithm.class, (o,hint) -> AutoJson.serialize(Registries.LEVEL_ARGOS.inverse().getOrDefault(o, Registries.DEFAULT)), (o,hint)->Registries.LEVEL_ARGOS.get(AutoJson.deserialize(Identifier.class, o)));
 		AutoJson.INSTANCE.register(Ability.class, (o,hint) -> AutoJson.serialize(Registries.ABILITIES.inverse().getOrDefault(o, Registries.DEFAULT)), (o,hint)->Registries.ABILITIES.get(AutoJson.deserialize(Identifier.class, o)));
+		AutoJson.INSTANCE.register(EntityAttribute.class, Registry.ATTRIBUTE);
 		// JsonObject obj = AutoJson.serialize(Smabs.MISSINGNO.species());
 		// File file = new File("test.json");
 		// try (FileOutputStream stream = new FileOutputStream(file)) {

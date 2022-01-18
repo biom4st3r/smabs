@@ -102,20 +102,28 @@ public final class Smab {
         return species.abilities().length == 0 ? -1 : new Random().nextInt(species.abilities().length);
     }
 
+    private int getStat(int dna, int species, int base) {
+        return dna + (int)(species * (this.getLevel()/((float)MAX_LEVEL/2))) + STAT.getLevel(base);
+    }
+
     public int getIntelligence() {
-        return dna.intelligence() + (int)(type.base_intelligence() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_intelligence);
+        return getStat(dna.intelligence(), type.base_intelligence(), this.individual_intelligence);
+        // return dna.intelligence() + (int)(type.base_intelligence() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_intelligence);
     }
 
     public int getStrength() {
-        return dna.strength() + (int)(type.base_strength() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_strength);
+        return getStat(dna.strength(), type.base_strength(), this.individual_strength);
+        // return dna.strength() + (int)(type.base_strength() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_strength);
     }
 
     public int getDexterity() {
-        return dna.dexterity() + (int)(type.base_dexterity() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_dexterity);
+        return getStat(dna.dexterity(), type.base_dexterity(), this.individual_dexterity);
+        // return dna.dexterity() + (int)(type.base_dexterity() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_dexterity);
     }
 
     public int getVitality() {
-        return dna.vitality() + (int)(type.base_vitality() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_vitality);
+        return getStat(dna.vitality(), type.base_vitality(), this.individual_vitality);
+        // return dna.vitality() + (int)(type.base_vitality() * (this.getLevel()/(float)MAX_LEVEL)) + STAT.getLevel(individual_vitality);
     }
 
     public int getHappiness() {
