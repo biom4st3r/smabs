@@ -15,7 +15,7 @@ import net.minecraft.util.Rarity;
 
 public final class Smabs {
 
-    public static final JsonSmabBundle MISSINGNO = new JsonSmabBundle(
+    public static final SmabBundle MISSINGNO = new JsonSmabBundle(
         new Identifier(ModInit.MODID, "missingno"),
         0,
         0,
@@ -32,7 +32,7 @@ public final class Smabs {
         Rarity.COMMON,
         new JsonEntityAttributeBundle[]{},
         SpawnGroup.CREATURE
-    );
+    ).build();
 
     public static void classLoad() {}
 }
