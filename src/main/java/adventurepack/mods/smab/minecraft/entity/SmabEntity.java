@@ -11,7 +11,6 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -42,8 +41,9 @@ public class SmabEntity extends MobEntity implements IAnimatable,Tameable {
 
     @Override
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-        if (this.smab.isOT(player)) {
-            player.giveItemStack(Smab.convertToItem(this.smab));
+        if (this.smab.isOT(player) && player.getStackInHand(hand).isEmpty()) {
+            // player.giveItemStack(Smab.convertToItem(this.smab));
+            player.setStackInHand(hand, Smab.convertToItem(this.smab));
             this.remove(RemovalReason.DISCARDED);
             return ActionResult.SUCCESS;
         }
