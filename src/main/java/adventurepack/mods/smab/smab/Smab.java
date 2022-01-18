@@ -1,36 +1,58 @@
 package adventurepack.mods.smab.smab;
 
 import java.util.Random;
+import java.util.UUID;
 
 import com.google.common.base.Preconditions;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public final class Smab {
-    /**
-     * Access to this should done through getters
-     */
-    private final SmabSpecies type;
-    private final DNA dna;
-    private int happiness;
 
-    private static LevelAlgorithm STAT = exp -> (int)exp/100;
+    private static final LevelAlgorithm STAT = exp -> (int)exp/100;
     private static final int MAX_INDIVIDUAL_STAT = 31 * 100;
     private static final int MAX_HAPPINESS = 10;
     private static final int MAX_LEVEL = 33;
 
-    private int individual_intelligence;
-    private int individual_strength;
-    private int individual_dexterity;
-    private int individual_vitality;
-    private ItemStack heldItem;
-    private String nickname;
-    private int experience;
+    /**
+     * Access to this should done through getters
+     */
+    private final SmabSpecies type;
     /**
      * index of the ability from Smab.type.abilities[]
      */
     private final int ability_index;
+    private final DNA dna;
+
+    private int happiness;
+    private int individual_intelligence;
+    private int individual_strength;
+    private int individual_dexterity;
+    private int individual_vitality;
+
+    private ItemStack heldItem;
+    private String nickname;
+    private int experience;
+
+    private String OT = "";
+    private UUID OT_UUID;
+
+    public String getOt() {
+        return OT;
+    }
+
+    public void setOT(PlayerEntity player) {
+        if(OT.isEmpty()) {
+            OT = player.getEntityName();
+            OT_UUID = player.getUuid();
+        }
+    }
+
+    public boolean isOT(PlayerEntity pe) {
+        return pe.getUuid().equals(OT_UUID);
+    }
 
     public Smab(SmabSpecies species, DNA dna, int happiness, 
             int individual_intelligence, int individual_strength,
@@ -43,24 +65,21 @@ public final class Smab {
         Preconditions.checkNotNull(nickname);
         this.dna = dna;
         this.type = species;
+        this.ability_index = ability_index;
+
         this.happiness = happiness;
-        // TODO Handle max individual stats
         this.individual_vitality = individual_vitality;
         this.individual_dexterity = individual_dexterity;
         this.individual_intelligence = individual_intelligence;
         this.individual_strength = individual_strength;
+
         this.experience = experience;
-        this.ability_index = ability_index;
         this.heldItem = heldItem;
         this.nickname = nickname;
     }
 
-    private static int getRandomAbility(SmabSpecies species) {
-        return species.abilities().length == 0 ? -1 : new Random().nextInt(species.abilities().length);
-    }
-
     public Smab(SmabSpecies species) {
-        this(species, DNA.getRandom(), ItemStack.EMPTY,"");
+        this(species, DNA.getRandom(), ItemStack.EMPTY, "");
     }
 
     public Smab(SmabSpecies species, DNA dna, ItemStack heldItem, String nickname) {
@@ -69,6 +88,10 @@ public final class Smab {
 
     public Smab(SmabSpecies species, String nickname) {
         this(species, DNA.getRandom(), ItemStack.EMPTY, nickname);
+    }
+
+    private static int getRandomAbility(SmabSpecies species) {
+        return species.abilities().length == 0 ? -1 : new Random().nextInt(species.abilities().length);
     }
 
     public int getIntelligence() {

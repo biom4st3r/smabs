@@ -25,6 +25,13 @@ public class SmabEntity extends MobEntity implements IAnimatable,Tameable {
         this.ignoreCameraFrustum = true;
     }
 
+    public SmabEntity(EntityType<? extends SmabEntity> entityType, World world, Smab smab) {
+        super(entityType, world);
+        this.smab = smab;
+        this.animationFactory = new AnimationFactory(this);
+        this.ignoreCameraFrustum = true;
+    }
+
     public Smab getSmab() {
         return this.smab;
     }

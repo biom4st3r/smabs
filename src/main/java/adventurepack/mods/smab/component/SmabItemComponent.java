@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 public class SmabItemComponent extends PooledItemComponent {
     public static final ComponentKey<SmabItemComponent> KEY = PooledItemComponent.ComponentKey.of(SmabItemComponent.class, "smabitemcomponent", SmabItemComponent::new);
 
-    Smab smab;
+    public Smab smab;
 
     @Override
     public void fromStack(ItemStack stack) {

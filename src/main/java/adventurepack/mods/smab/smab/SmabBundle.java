@@ -5,6 +5,7 @@ import adventurepack.mods.smab.Registries;
 import adventurepack.mods.smab.minecraft.entity.SmabEntity;
 import adventurepack.mods.smab.minecraft.entity.SmabEntityModel;
 import adventurepack.mods.smab.minecraft.entity.SmabEntityRenderer;
+import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -26,6 +27,7 @@ public record SmabBundle(SmabSpecies species, EntityType<SmabEntity> type, Item 
             EntityRendererRegistry.register(type, ctx -> new SmabEntityRenderer(ctx,new SmabEntityModel(species)));
         }
         Registry.register(Registry.ITEM, species().id(), item);
+        TrinketsApi.registerTrinket(item, new SmabTrinket());
         Registries.SMABS.put(species().id(), this);
     }
 

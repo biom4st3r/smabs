@@ -1,10 +1,42 @@
 package adventurepack.mods.smab.smab;
 
+import adventurepack.mods.smab.Registries;
+import adventurepack.mods.smab.component.SmabItemComponent;
+import adventurepack.mods.smab.minecraft.entity.SmabEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.world.World;
 
 public class SmabItem extends Item {
+    private final SmabSpecies species;
+
+
     public SmabItem(SmabSpecies species, Settings settings) {
         super(settings);
+        this.species = species;
     }
     
+
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        boolean[] bl = {false};
+        SmabItemComponent.KEY.borrowPooledComponent(user.getStackInHand(hand), comp -> {
+            if (comp.smab == null) {
+                comp.smab = new Smab(this.species);
+                comp.smab.setOT(user);
+                bl[0] = true;
+            }
+            if (user.isSneaking()) {
+                SmabEntity entity = new SmabEntity(Registries.SMABS.get(this.species.id()).type(), world, comp.smab);
+                user.getStackInHand(hand).decrement(1);
+                entity.updatePositionAndAngles(user.getX(), user.getY(), user.getZ(), user.getYaw(), user.getPitch());
+                world.spawnEntity(entity);
+            }
+        }, bl[0]);
+
+        return super.use(world, user, hand);
+    }
 }
