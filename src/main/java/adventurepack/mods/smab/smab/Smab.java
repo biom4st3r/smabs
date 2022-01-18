@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import com.google.common.base.Preconditions;
 
+import adventurepack.mods.smab.Registries;
+import adventurepack.mods.smab.component.SmabItemComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -41,6 +43,12 @@ public final class Smab {
 
     public String getOt() {
         return OT;
+    }
+
+    public static ItemStack convertToItem(Smab smab) {
+        ItemStack is = new ItemStack(Registries.SMABS.get(smab.type.id()).item());
+        SmabItemComponent.KEY.borrowPooledComponent(is, comp->comp.smab = smab, true);
+        return is;
     }
 
     public void setOT(PlayerEntity player) {
