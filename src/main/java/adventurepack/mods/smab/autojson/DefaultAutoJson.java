@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import biom4st3r.libs.biow0rks.NoEx;
 
@@ -33,8 +34,7 @@ public class DefaultAutoJson extends AutoJson {
         // Try to use a serializer
         if (SERIALIZE.containsKey(hostClass)) {
             return (T) ((JsonSerial)SERIALIZE.get(hostClass)).serial(host, hints);
-        }
-        if (Record.class.isAssignableFrom(hostClass)) { // IF IS RECORD
+        } else if (hostClass.isRecord()) { // IF IS RECORD
             RecordComponent[] rcs = hostClass.getRecordComponents();
             JsonObject obj = new JsonObject();
             for (RecordComponent recordComponent : rcs) {
@@ -45,6 +45,8 @@ public class DefaultAutoJson extends AutoJson {
                 }
             }
             return (T) obj;
+        } else if (hostClass.isEnum()) {
+            return (T) new JsonPrimitive(((Enum)host).name());
         }
         // Check for array not covered by serializers
         if (hostClass.getComponentType() != null) {
@@ -88,8 +90,7 @@ public class DefaultAutoJson extends AutoJson {
     public <T> T deserialize(Class<T> hostClass, JsonElement element, AutoJsonSerialize hints) {
         if (DESERIALIZE.containsKey(hostClass)) {
             return (T) ((JsonDeserial)DESERIALIZE.get(hostClass)).deserial(element, hints);
-        }        
-        if (Record.class.isAssignableFrom(hostClass)) { // IF IS RECORD 
+        } else if (hostClass.isRecord()) { // IF IS RECORD 
             try {
                 MethodHandle ctor = this.getLookup().unreflectConstructor(hostClass.getConstructors()[0]);
                 RecordComponent[] rcs = hostClass.getRecordComponents();
@@ -102,6 +103,9 @@ public class DefaultAutoJson extends AutoJson {
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
+        } else if (hostClass.isEnum()) {
+            // hostClass.isEnum()
+            return (T) Enum.valueOf((Class)hostClass, element.getAsString());
         }
         if(hostClass.getComponentType() != null) {
             JsonArray list = (JsonArray) element;

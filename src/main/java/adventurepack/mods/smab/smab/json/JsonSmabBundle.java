@@ -56,7 +56,7 @@ public record JsonSmabBundle(
             algo, 
             Util.make(Maps.newHashMap(),map -> {
                 for (JsonDietaryPair pair : diet) {
-                    map.put(pair.item(), pair.effect());
+                    map.put(pair.item(), pair.dietary_effect());
                 }
             }), 
             tags, 
