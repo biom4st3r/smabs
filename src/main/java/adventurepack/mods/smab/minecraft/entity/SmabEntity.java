@@ -13,6 +13,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
@@ -56,8 +59,11 @@ public class SmabEntity extends PathAwareEntity implements IAnimatable,Tameable 
     }
 
     @Override
-    public void registerControllers(AnimationData arg0) {
-        
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<IAnimatable>(this, "controller", 0, (event)-> {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(String.format("animation.%s.%s.idle", this.smab.getId().getNamespace(),this.smab.getId().getPath()),true));
+            return PlayState.CONTINUE;
+        }));
     }
 
     @Override

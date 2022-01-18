@@ -10,6 +10,7 @@ import adventurepack.mods.smab.component.SmabItemComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
 
 public final class Smab {
 
@@ -43,6 +44,10 @@ public final class Smab {
 
     public String getOt() {
         return OT;
+    }
+
+    public Identifier getId() {
+        return this.type.id();
     }
 
     public static ItemStack convertToItem(Smab smab) {
