@@ -41,7 +41,8 @@ public class SmabEntity extends PathAwareEntity implements IAnimatable,Tameable 
 
     @Override
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-        if (this.smab.isOT(player) && player.getStackInHand(hand).isEmpty()) {
+        if ((this.smab.isOT(player) || !this.smab.hasOT()) && player.getStackInHand(hand).isEmpty()) {
+            if (!this.smab.hasOT()) this.smab.setOT(player);
             player.setStackInHand(hand, Smab.convertToItem(this.smab));
             this.remove(RemovalReason.DISCARDED);
             return ActionResult.SUCCESS;

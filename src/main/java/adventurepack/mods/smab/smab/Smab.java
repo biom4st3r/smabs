@@ -62,6 +62,10 @@ public final class Smab {
         return pe.getUuid().equals(OT_UUID);
     }
 
+    public boolean hasOT() {
+        return OT_UUID != null;
+    }
+
     public Smab(SmabSpecies species, DNA dna, int happiness, 
             int individual_intelligence, int individual_strength,
             int individual_dexterity, int individual_vitality,
