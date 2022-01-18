@@ -11,6 +11,8 @@ import adventurepack.mods.smab.smab.SmabSpecies;
 import adventurepack.mods.smab.smab.Tag;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -31,7 +33,7 @@ public final class Smabs {
                 Tag.create(),
                 false
             ),
-            FabricEntityTypeBuilder.<SmabEntity>createMob().spawnGroup(SpawnGroup.CREATURE)
+            FabricEntityTypeBuilder.<SmabEntity>createMob().spawnGroup(SpawnGroup.CREATURE).defaultAttributes(()-> MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3F).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0))
         );
     public static void classLoad() {}
 }

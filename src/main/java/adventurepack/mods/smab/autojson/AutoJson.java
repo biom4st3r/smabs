@@ -66,6 +66,8 @@ public abstract class AutoJson {
         T deserial(B toTag, AutoJsonSerialize hints);
     }
 
+    public static record SerialContext(Class<?> fieldType, String fieldName, MethodHandle handle, AutoJsonSerialize hints){}
+
     protected static boolean isPublic(Field f) {
         return Modifier.isPublic(f.getModifiers());
     }
@@ -134,8 +136,6 @@ public abstract class AutoJson {
     public static <T extends JsonElement> T serialize(Object host, AutoJsonSerialize hints) {
         return INSTANCE.serialize(host.getClass(), host, hints);
     }
-
-    public static record SerialContext(Class<?> fieldType, String fieldName, MethodHandle handle, AutoJsonSerialize hints){}
 
     public abstract <T extends JsonElement> T serialize(Class<?> hostClass, Object host, AutoJsonSerialize hints);
 
@@ -297,7 +297,6 @@ public abstract class AutoJson {
         //     (bs,hints)-> BlockState.CODEC.stable().encodeStart(NbtOps.INSTANCE, bs).getOrThrow(true, (s)->new RuntimeException(s)), 
         //     (nbtelement,hints)->BlockState.CODEC.stable().decode(NbtOps.INSTANCE, nbtelement).getOrThrow(true, (str) -> new RuntimeException(str)).getFirst()
         // );
-        // NbtIo.writeCompressed(compound, file);
         INSTANCE.register(Block.class, Registry.BLOCK);
         INSTANCE.register(Item.class, Registry.ITEM);
         INSTANCE.register(Enchantment.class, Registry.ENCHANTMENT);

@@ -7,7 +7,7 @@ import adventurepack.mods.smab.smab.SmabSpecies;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Tameable;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -16,7 +16,7 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class SmabEntity extends MobEntity implements IAnimatable,Tameable {
+public class SmabEntity extends PathAwareEntity implements IAnimatable,Tameable {
 
     private final AnimationFactory animationFactory;
     private final Smab smab;
@@ -42,7 +42,6 @@ public class SmabEntity extends MobEntity implements IAnimatable,Tameable {
     @Override
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         if (this.smab.isOT(player) && player.getStackInHand(hand).isEmpty()) {
-            // player.giveItemStack(Smab.convertToItem(this.smab));
             player.setStackInHand(hand, Smab.convertToItem(this.smab));
             this.remove(RemovalReason.DISCARDED);
             return ActionResult.SUCCESS;
