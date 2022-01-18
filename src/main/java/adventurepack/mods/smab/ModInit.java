@@ -1,12 +1,5 @@
 package adventurepack.mods.smab;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import com.google.gson.JsonObject;
-
-import adventurepack.mods.SmabLoader;
 import adventurepack.mods.smab.autojson.AutoJson;
 import adventurepack.mods.smab.smab.Ability;
 import adventurepack.mods.smab.smab.LevelAlgorithm;
@@ -16,6 +9,7 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import software.bernie.geckolib3.GeckoLib;
 
 public class ModInit implements ModInitializer {
 
@@ -24,6 +18,7 @@ public class ModInit implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		GeckoLib.initialize();
 		Smabs.classLoad();
 		AutoJson.INSTANCE.register(LevelAlgorithm.class, (o,hint) -> AutoJson.serialize(Registries.LEVEL_ARGOS.inverse().getOrDefault(o, Registries.DEFAULT)), (o,hint)->Registries.LEVEL_ARGOS.get(AutoJson.deserialize(Identifier.class, o)));
 		AutoJson.INSTANCE.register(Ability.class, (o,hint) -> AutoJson.serialize(Registries.ABILITIES.inverse().getOrDefault(o, Registries.DEFAULT)), (o,hint)->Registries.ABILITIES.get(AutoJson.deserialize(Identifier.class, o)));
