@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 
 public final class Smab {
 
@@ -44,6 +45,14 @@ public final class Smab {
 
     public String getOt() {
         return OT;
+    }
+
+    public UUID getOtUUID() {
+        return OT_UUID;
+    }
+
+    public PlayerEntity getOtEntity(World world) {
+        return world.getPlayerByUuid(OT_UUID);
     }
 
     public Identifier getId() {

@@ -68,12 +68,12 @@ public class SmabEntity extends PathAwareEntity implements IAnimatable,Tameable 
 
     @Override
     public UUID getOwnerUuid() {
-        return null;
+        return this.smab.getOtUUID();
     }
 
     @Override
     public Entity getOwner() {
-        return null;
+        return this.smab.getOtEntity(this.world);
     }
 
 }
