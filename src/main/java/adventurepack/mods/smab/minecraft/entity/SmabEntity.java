@@ -19,7 +19,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class SmabEntity extends PathAwareEntity implements IAnimatable,Tameable {
+public class SmabEntity extends PathAwareEntity implements IAnimatable, Tameable {
 
     private final AnimationFactory animationFactory;
     private final Smab smab;
@@ -58,11 +58,22 @@ public class SmabEntity extends PathAwareEntity implements IAnimatable,Tameable 
         return this.animationFactory;
     }
 
+    private String getAnimation(String animation) {
+        return String.format("animation.%s.%s.%s", this.smab.getId().getNamespace(), this.smab.getId().getPath(), animation);
+    }
+
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<IAnimatable>(this, "controller", 0, (event)-> {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(String.format("animation.%s.%s.idle", this.smab.getId().getNamespace(),this.smab.getId().getPath()),true));
-            return PlayState.CONTINUE;
+            if (event.isMoving()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(getAnimation("walking"), true));
+                return PlayState.CONTINUE;
+            } else if (Boolean.FALSE.booleanValue()) {
+                return PlayState.CONTINUE;
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(getAnimation("idle"),true));
+                return PlayState.CONTINUE;
+            }
         }));
     }
 

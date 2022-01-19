@@ -1,10 +1,19 @@
 https://hackmd.io/rYPFfRjCSEiw8x7PL-1Eww?view
 
-## Loading Smabs from json
+## Magic directories
+### Model
+`resource/assets/ap_smabs/geo/{entity_name}.geo.json`
 
-`/config/smab/` directory will attempt to load all jsons into smabs and register them.
+### Animation
+`resource/assets/ap_smabs/animations/{entity_name}.animation.json`
 
-Registering a smab will automatically create: SmabSpecies, SmabItem, and an EntityType(if hasEntity is true) for the smab.
+### Texture
+`resource/assets/ap_smabs/textures/entity/{entity_name}.png`
+
+### Json Smabs
+`config/smab/{smabname}.json`
+* directory will attempt to load all jsons into smabs and register them.
+  - Registering a smab will automatically create: SmabSpecies, SmabItem, and an EntityType(if hasEntity is true) for the smab.
 
 
 SmabSpecies Format
