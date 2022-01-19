@@ -2,6 +2,7 @@ package adventurepack.mods.smab.minecraft.entity;
 
 import java.util.UUID;
 
+import adventurepack.mods.smab.ModInit;
 import adventurepack.mods.smab.smab.Smab;
 import adventurepack.mods.smab.smab.SmabSpecies;
 import net.minecraft.entity.Entity;
@@ -64,6 +65,7 @@ public class SmabEntity extends PathAwareEntity implements IAnimatable, Tameable
 
     @Override
     public void registerControllers(AnimationData data) {
+        if (ModInit.disable_animations) return;
         data.addAnimationController(new AnimationController<IAnimatable>(this, "controller", 0, (event)-> {
             if (event.isMoving()) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation(getAnimation("walking"), true));

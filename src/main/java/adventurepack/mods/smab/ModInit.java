@@ -13,6 +13,8 @@ import software.bernie.geckolib3.GeckoLib;
 
 public class ModInit implements ModInitializer {
 
+	public static final boolean disable_animations = false;
+
 	public static final String MODID = "ap_smabs";
 	public static final ItemGroup SMABS_GROUP = FabricItemGroupBuilder.create(new Identifier(MODID,"item_group")).build();
 
