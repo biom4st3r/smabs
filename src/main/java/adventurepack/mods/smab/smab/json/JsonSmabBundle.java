@@ -1,8 +1,7 @@
 package adventurepack.mods.smab.smab.json;
 
-import java.util.Set;
-
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import adventurepack.mods.smab.ModInit;
 import adventurepack.mods.smab.minecraft.entity.SmabEntity;
@@ -13,6 +12,7 @@ import adventurepack.mods.smab.smab.SmabSpecies;
 import adventurepack.mods.smab.smab.Tag;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.attribute.DefaultAttributeContainer.Builder;
@@ -33,13 +33,15 @@ public record JsonSmabBundle(
     /**
      * Shouldn't be checked directly. Allow the Smab instance to add it own stuff
      */
-    Set<Tag> tags,
+    Tag[] tags,
     boolean has_entity,
     // END OF SMAB_SPECIES
     float entity_dimension_width,
     float entity_dimension_height,
     boolean entity_dimension_fixed_size,
-    // END OF ENTITY_DIMENSIONS
+    boolean is_fire_immune,
+    Block[] can_only_spawn_on,
+    // END OF ENTITY
     Rarity item_rarity,
     //  END OF ITEM
     JsonEntityAttributeBundle[] entity_attributes,
@@ -59,7 +61,7 @@ public record JsonSmabBundle(
                     map.put(pair.item(), pair.dietary_effect());
                 }
             }), 
-            tags, 
+            Sets.newHashSet(tags),
             has_entity
         );
         FabricEntityTypeBuilder.Mob<SmabEntity> builder = FabricEntityTypeBuilder
@@ -80,6 +82,10 @@ public record JsonSmabBundle(
             }
             return i;
         });
+        if (is_fire_immune) builder.fireImmune();
+        if (can_only_spawn_on.length != 0) {
+            builder.specificSpawnBlocks(can_only_spawn_on);
+        }
 
         return SmabBundle.create(
             species,

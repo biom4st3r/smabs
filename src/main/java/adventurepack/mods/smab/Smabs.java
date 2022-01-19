@@ -8,6 +8,7 @@ import adventurepack.mods.smab.smab.Tag;
 import adventurepack.mods.smab.smab.json.JsonDietaryPair;
 import adventurepack.mods.smab.smab.json.JsonEntityAttributeBundle;
 import adventurepack.mods.smab.smab.json.JsonSmabBundle;
+import net.minecraft.block.Block;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
@@ -15,7 +16,7 @@ import net.minecraft.util.Rarity;
 
 public final class Smabs {
 
-    public static final SmabBundle MISSINGNO = new JsonSmabBundle(
+    public static final JsonSmabBundle MISSINGNO_TEST_BUNDLE = new JsonSmabBundle(
         new Identifier(ModInit.MODID, "missingno"),
         0,
         0,
@@ -24,15 +25,19 @@ public final class Smabs {
         new Ability[0], 
         LevelAlgorithm.STRAIGHT_LOG,
         new JsonDietaryPair[] {new JsonDietaryPair(Items.DIAMOND, new DietaryEffect(-5,0,0,5))},
-        Tag.create(),
+        new Tag[]{},
         false,
-        1,
-        1,
+        2,
+        4,
         true,
+        false,
+        new Block[]{},
         Rarity.COMMON,
         new JsonEntityAttributeBundle[]{},
         SpawnGroup.CREATURE
-    ).build();
+    );
+
+    public static final SmabBundle MISSINGNO = MISSINGNO_TEST_BUNDLE.build();
 
     public static void classLoad() {}
 }

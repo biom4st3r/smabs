@@ -28,7 +28,7 @@ public record SmabBundle(SmabSpecies species, EntityType<SmabEntity> type, Item 
         }
         Registry.register(Registry.ITEM, species().id(), item);
         TrinketsApi.registerTrinket(item, new SmabTrinket());
-        Registries.SMABS.put(species().id(), this);
+        Registries.SMABS.register(species().id(), this);
     }
 
     public SmabBundle(SmabSpecies species, FabricEntityTypeBuilder<SmabEntity> builder, Item.Settings settings) {

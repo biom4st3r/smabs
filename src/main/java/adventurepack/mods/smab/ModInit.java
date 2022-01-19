@@ -1,5 +1,11 @@
 package adventurepack.mods.smab;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import com.google.gson.JsonObject;
+
 import adventurepack.mods.smab.autojson.AutoJson;
 import adventurepack.mods.smab.smab.Ability;
 import adventurepack.mods.smab.smab.LevelAlgorithm;
@@ -22,18 +28,22 @@ public class ModInit implements ModInitializer {
 	public void onInitialize() {
 		GeckoLib.initialize();
 		Smabs.classLoad();
-		AutoJson.INSTANCE.register(LevelAlgorithm.class, (o,hint) -> AutoJson.serialize(Registries.LEVEL_ARGOS.inverse().getOrDefault(o, Registries.DEFAULT)), (o,hint)->Registries.LEVEL_ARGOS.get(AutoJson.deserialize(Identifier.class, o)));
-		AutoJson.INSTANCE.register(Ability.class, (o,hint) -> AutoJson.serialize(Registries.ABILITIES.inverse().getOrDefault(o, Registries.DEFAULT)), (o,hint)->Registries.ABILITIES.get(AutoJson.deserialize(Identifier.class, o)));
+		AutoJson.INSTANCE.register(LevelAlgorithm.class, (o,hint) -> AutoJson.serialize(Registries.LEVEL_ARGOS.getIdOrDefault(o)), (o,hint)->Registries.LEVEL_ARGOS.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
+		AutoJson.INSTANCE.register(Ability.class, (o,hint) -> AutoJson.serialize(Registries.ABILITIES.getIdOrDefault(o)), (o,hint)->Registries.ABILITIES.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
 		AutoJson.INSTANCE.register(EntityAttribute.class, Registry.ATTRIBUTE);
-		// JsonObject obj = AutoJson.serialize(Smabs.MISSINGNO);
-		// File file = new File("test.json");
-		// try (FileOutputStream stream = new FileOutputStream(file)) {
-		// 	stream.write(obj.toString().getBytes());
-		// 	stream.close();
-		// 	System.exit(0);
-		// } catch (IOException e) {
-		// 	e.printStackTrace();
-		// }
+		// export_json();
 		SmabLoader.init();
+	}
+
+	private static void export_json() {
+		JsonObject obj = AutoJson.serialize(Smabs.MISSINGNO_TEST_BUNDLE);
+		File file = new File("test.json");
+		try (FileOutputStream stream = new FileOutputStream(file)) {
+			stream.write(obj.toString().getBytes());
+			stream.close();
+			System.exit(0);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

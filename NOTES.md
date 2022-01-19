@@ -25,7 +25,7 @@ SmabSpecies Format
   "base_dexterity": 0,
   "base_vitality": 0,
   "abilities": [], // Unused no touch
-  "algo": "ap_smabs:missingno", // Identified to the level up algo you want. Currently only this one.
+  "algo": "ap_smabs:missingno", // straight_log, slow, fast, medium_fast. Identified to the level up algo you want. 
   "diet": [ // array of 
     {
       "item": "minecraft:diamond",
@@ -48,9 +48,11 @@ SmabSpecies Format
   ],
   "tags": {}, // Unused no touch
   "has_entity": false,
-  "entity_dimension_width": 1,
-  "entity_dimension_height": 1,
+  "entity_dimension_width": 2,
+  "entity_dimension_height": 4,
   "entity_dimension_fixed_size": true,
+  "is_fire_immune": false,
+  "can_only_spawn_on": [], // Array of Blocks the entity can spawn on
   "item_rarity": "COMMON", // COMMON, UNCOMMON, RARE, EPIC
   "entity_attributes": [], // will document later
   "entity_spawn_group": "CREATURE" //  MONSTER, CREATURE, AMBIENT, AXOLOTLS, UNDERGROUND_WATER_CREATURE, WATER_CREATURE, WATER_AMBIENT, MISC
