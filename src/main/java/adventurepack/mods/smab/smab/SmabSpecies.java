@@ -28,9 +28,10 @@ public record SmabSpecies(
         ) {
 
         public Text name() {
-                return new TranslatableText(String.format("%s.smab.name.%s", this.id().getNamespace(),this.id().getPath()));
+                return new TranslatableText(String.format("smab.name.%s.%s", this.id().getNamespace(),this.id().getPath()));
         }
+
         public Text lore() {
-                return new TranslatableText(String.format("%s.smab.lore.%s", this.id().getNamespace(),this.id().getPath()));
+                return new TranslatableText(String.format("smab.lore.%s.%s", this.id().getNamespace(),this.id().getPath()));
         }
 }

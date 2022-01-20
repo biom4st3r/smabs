@@ -1,8 +1,12 @@
 package adventurepack.mods.smab;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import adventurepack.mods.smab.smab.Smab;
+import adventurepack.mods.smab.smab.SmabItem;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
@@ -12,6 +16,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.OrderedText;
 import net.minecraft.util.math.Matrix4f;
 
 /**
@@ -40,24 +45,31 @@ public class ModInitClient implements ClientModInitializer {
     }
 
     @SuppressWarnings({"resource"})
-    public static void renderSmabToolTip(MatrixStack matrices, Smab smab, int x, int y) {
+    public static void renderSmabToolTip(MatrixStack matrices, SmabItem item, Smab smab, int x, int y) {
         
-        int box_width = 50;
-        int box_height = 50;
+        List<OrderedText> lines = Lists.newArrayList();
+        lines.add(smab != null ? smab.getNicknameText().asOrderedText() : item.species.name().asOrderedText());
 
-        // box_width = MinecraftClient.getInstance().textRenderer.getWidth(smab.getNicknameText().toString()) + 12;
+        int box_width = 0;
+        for (OrderedText text : lines) {
+            if (box_width <  MinecraftClient.getInstance().textRenderer.getWidth(text)) {
+                box_width =  MinecraftClient.getInstance().textRenderer.getWidth(text);
+            }
+        }
+        int box_height = 9 * lines.size();
+
 
         int width = MinecraftClient.getInstance().currentScreen.width;
         int height = MinecraftClient.getInstance().currentScreen.height;
 
-        int l = x + 12;
-        int tooltipComponent = y - 12;
-        if (l + box_width > width) {
-            l -= 28 + box_width;
+        int a_x = x + 12;
+        int a_y = y - 12;
+        if (a_x + box_width > width) {
+            a_x -= 28 + box_width;
         }
 
-        if (tooltipComponent + box_height + 6 > height) {
-            tooltipComponent = height - box_height - 6;
+        if (a_y + box_height + 6 > height) {
+            a_y = height - box_height - 6;
         }
 
         matrices.push();
@@ -66,15 +78,19 @@ public class ModInitClient implements ClientModInitializer {
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-        fillGradient(matrix4f, bufferBuilder, l - 3, tooltipComponent - 4, l + box_width + 3, tooltipComponent - 3, 400, -267386864, -267386864);
-        fillGradient(matrix4f, bufferBuilder, l - 3, tooltipComponent + box_height + 3, l + box_width + 3, tooltipComponent + box_height + 4, 400, -267386864, -267386864);
-        fillGradient(matrix4f, bufferBuilder, l - 3, tooltipComponent - 3, l + box_width + 3, tooltipComponent + box_height + 3, 400, -267386864, -267386864);
-        fillGradient(matrix4f, bufferBuilder, l - 4, tooltipComponent - 3, l - 3, tooltipComponent + box_height + 3, 400, -267386864, -267386864);
-        fillGradient(matrix4f, bufferBuilder, l + box_width + 3, tooltipComponent - 3, l + box_width + 4, tooltipComponent + box_height + 3, 400, -267386864, -267386864);
-        fillGradient(matrix4f, bufferBuilder, l - 3, tooltipComponent - 3 + 1, l - 3 + 1, tooltipComponent + box_height + 3 - 1, 400, 1347420415, 1344798847);
-        fillGradient(matrix4f, bufferBuilder, l + box_width + 2, tooltipComponent - 3 + 1, l + box_width + 3, tooltipComponent + box_height + 3 - 1, 400, 1347420415, 1344798847);
-        fillGradient(matrix4f, bufferBuilder, l - 3, tooltipComponent - 3, l + box_width + 3, tooltipComponent - 3 + 1, 400, 1347420415, 1347420415);
-        fillGradient(matrix4f, bufferBuilder, l - 3, tooltipComponent + box_height + 2, l + box_width + 3, tooltipComponent + box_height + 3, 400, 1344798847, 1344798847);
+        int color0 = 0xF0_100010;
+        int color1 = 0x50_5000FF;
+        int color2 = 0x50_28007F;
+
+        fillGradient(matrix4f, bufferBuilder, a_x - 3, a_y - 4, a_x + box_width + 3, a_y - 3, 400, color0, color0);
+        fillGradient(matrix4f, bufferBuilder, a_x - 3, a_y + box_height + 3, a_x + box_width + 3, a_y + box_height + 4, 400, color0, color0);
+        fillGradient(matrix4f, bufferBuilder, a_x - 3, a_y - 3, a_x + box_width + 3, a_y + box_height + 3, 400, color0, color0);
+        fillGradient(matrix4f, bufferBuilder, a_x - 4, a_y - 3, a_x - 3, a_y + box_height + 3, 400, color0, color0);
+        fillGradient(matrix4f, bufferBuilder, a_x + box_width + 3, a_y - 3, a_x + box_width + 4, a_y + box_height + 3, 400, color0, color0);
+        fillGradient(matrix4f, bufferBuilder, a_x - 3, a_y - 3 + 1, a_x - 3 + 1, a_y + box_height + 3 - 1, 400, color1, color2);
+        fillGradient(matrix4f, bufferBuilder, a_x + box_width + 2, a_y - 3 + 1, a_x + box_width + 3, a_y + box_height + 3 - 1, 400, color1, color2);
+        fillGradient(matrix4f, bufferBuilder, a_x - 3, a_y - 3, a_x + box_width + 3, a_y - 3 + 1, 400, color1, color1);
+        fillGradient(matrix4f, bufferBuilder, a_x - 3, a_y + box_height + 2, a_x + box_width + 3, a_y + box_height + 3, 400, color2, color2);
         RenderSystem.enableDepthTest();
         RenderSystem.disableTexture();
         RenderSystem.enableBlend();
@@ -83,7 +99,15 @@ public class ModInitClient implements ClientModInitializer {
         BufferRenderer.draw(bufferBuilder);
         RenderSystem.disableBlend();
         RenderSystem.enableTexture();
-        // Screen.drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, smab.getNicknameText(), (width/2), 5, 0xFFFF_FFFF);
+        // VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+        matrices.translate(0.0, 0.0, 400.0);
+
+        int i = 0;
+        for (OrderedText orderedText : lines) {
+            MinecraftClient.getInstance().textRenderer.draw(matrices, orderedText, (float)a_x, (float)a_y + (i * 9), -1);
+        }
+
+        // Screen.drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, smab.getNicknameText(), x, y, 0xFFFF_FFFF);
         matrices.pop();
     }
     

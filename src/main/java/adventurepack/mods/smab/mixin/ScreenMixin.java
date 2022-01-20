@@ -21,7 +21,7 @@ public class ScreenMixin {
     )
     protected void smabs$renderToolTip(MatrixStack matrices, ItemStack stack, int x, int y, CallbackInfo ci) {
         if (stack.getItem() instanceof SmabItem) {
-            SmabItemComponent.KEY.borrowPooledComponent(stack, c -> ModInitClient.renderSmabToolTip(matrices, c.smab, x, y), false);
+            SmabItemComponent.KEY.borrowPooledComponent(stack, c -> ModInitClient.renderSmabToolTip(matrices, (SmabItem) stack.getItem(), c.smab, x, y), false);
             ci.cancel();
         }
     }

@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -241,15 +240,12 @@ public final class Smab {
     }
 
     public String getNickname() {
-        if (nickname.isBlank()) {
-            return "smabname." + this.getId().getNamespace() + "." + this.getId().getPath();
-        }
-        return this.nickname;
+        return getNicknameText().asString();
     }
 
     public Text getNicknameText() {
         if (nickname.isBlank()) {
-            return new TranslatableText("smabname." + this.getId().getNamespace() + "." + this.getId().getPath());
+            return type.name();
         }
         return new LiteralText(this.nickname);
     }

@@ -13,7 +13,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 public class SmabItem extends Item {
-    private final SmabSpecies species;
+    public final SmabSpecies species;
 
 
     public SmabItem(SmabSpecies species, Settings settings) {
