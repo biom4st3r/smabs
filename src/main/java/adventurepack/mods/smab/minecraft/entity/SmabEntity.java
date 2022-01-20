@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import adventurepack.mods.smab.ModInit;
 import adventurepack.mods.smab.smab.Smab;
 import adventurepack.mods.smab.smab.SmabSpecies;
+import biom4st3r.libs.biow0rks.autonbt.AutoNbt;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Tameable;
@@ -17,6 +18,7 @@ import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -30,7 +32,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class SmabEntity extends PathAwareEntity implements IAnimatable, Tameable {
 
     private final AnimationFactory animationFactory;
-    private final Smab smab;
+    private Smab smab;
 
     public SmabEntity(EntityType<? extends SmabEntity> entityType, World world, SmabSpecies type) {
         super(entityType, world);
@@ -50,6 +52,18 @@ public class SmabEntity extends PathAwareEntity implements IAnimatable, Tameable
         }
     }
 
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        this.smab = AutoNbt.deserialize(Smab.class, nbt.get("smab"));
+    }
+
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        nbt.put("smab", AutoNbt.serialize(smab));
+    }
+
     private static final AttributeRef MAX_HEALTH = new AttributeRef(EntityAttributes.GENERIC_MAX_HEALTH, UUID.fromString("51958a36-7881-42e9-a5bf-425df1391225"));
     private static final AttributeRef KNOCKBACK_RESIST = new AttributeRef(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, UUID.fromString("7736e577-65ec-44b9-942a-68efa0828933"));
     private static final AttributeRef SPEED = new AttributeRef(EntityAttributes.GENERIC_MOVEMENT_SPEED, UUID.fromString("aafd850d-6b45-4462-bf0e-9230bf5ee183"));
@@ -61,23 +75,21 @@ public class SmabEntity extends PathAwareEntity implements IAnimatable, Tameable
     private static final AttributeRef ARMOR = new AttributeRef(EntityAttributes.GENERIC_ARMOR, UUID.fromString("8b4039e9-b22a-4d69-9d5a-79c16b46aee7"));
     private static final AttributeRef ARMOR_TOUGHNESS = new AttributeRef(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, UUID.fromString("019251bf-75a1-49fb-9b90-18377443d66d"));
 
-    
-
     public void statUpdate() {
         REFS.forEach(ref -> this.getAttributeInstance(ref.attribute()).removeModifier(ref.uuid()));
-/*
-int int
-str str
-vit vit
-dex dex
+        /*
+            int int
+            str str
+            vit vit
+            dex dex
 
-int dex
-int vit
-str dex
-str vit
-str int
-dex vit
-*/
+            int dex
+            int vit
+            str dex
+            str vit
+            str int
+            dex vit
+        */
     EntityAttributeModifier mod_MAX_HEALTH = new EntityAttributeModifier(MAX_HEALTH.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
     EntityAttributeModifier mod_KNOCKBACK_RESIST = new EntityAttributeModifier(KNOCKBACK_RESIST.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
     EntityAttributeModifier mod_SPEED = new EntityAttributeModifier(SPEED.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
@@ -104,6 +116,7 @@ dex vit
 
     @Override
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
+        if(this.world.isClient) return ActionResult.SUCCESS;
         if ((this.smab.isOT(player) || !this.smab.hasOT()) && player.getStackInHand(hand).isEmpty()) {
             if (!this.smab.hasOT()) this.smab.setOT(player);
             player.setStackInHand(hand, Smab.convertToItem(this.smab));

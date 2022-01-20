@@ -13,15 +13,15 @@ public class SmabItemComponent extends PooledItemComponent {
 
     @Override
     public void fromStack(ItemStack stack) {
-        if (!stack.hasNbt() || stack.getSubNbt("smab").isEmpty()) return;
-        smab = AutoNbt.deserialize(Smab.class, stack.getSubNbt("smab"));
+        if (!stack.hasNbt() || stack.getSubNbt(KEY.id).isEmpty()) return;
+        smab = AutoNbt.deserialize(Smab.class, stack.getSubNbt(KEY.id));
         
     }
 
     @Override
     public void toStack(ItemStack stack) {
         if (smab == null) return;
-        stack.getOrCreateNbt().put("smab", AutoNbt.serialize(smab));
+        stack.getOrCreateNbt().put(KEY.id, AutoNbt.serialize(smab));
         
     }
 

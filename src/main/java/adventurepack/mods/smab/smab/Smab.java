@@ -7,9 +7,14 @@ import com.google.common.base.Preconditions;
 
 import adventurepack.mods.smab.Registries;
 import adventurepack.mods.smab.component.SmabItemComponent;
+import biom4st3r.libs.biow0rks.autonbt.AutoNbt;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -43,6 +48,40 @@ public final class Smab {
     private String OT = "";
     private UUID OT_UUID;
 
+    public NbtCompound serialize() {
+        NbtCompound compound = new NbtCompound();
+        compound.put("type", AutoNbt.serialize(type));
+        compound.put("ability_index", AutoNbt.serialize(ability_index));
+        compound.put("dna", AutoNbt.serialize(dna));
+        compound.put("happiness", AutoNbt.serialize(happiness));
+        compound.put("individual_intelligence", AutoNbt.serialize(individual_intelligence));
+        compound.put("individual_strength", AutoNbt.serialize(individual_strength));
+        compound.put("individual_dexterity", AutoNbt.serialize(individual_dexterity));
+        compound.put("individual_vitality", AutoNbt.serialize(individual_vitality));
+        compound.put("heldItem", AutoNbt.serialize(heldItem));
+        compound.put("nickname", AutoNbt.serialize(nickname));
+        compound.put("experience", AutoNbt.serialize(experience));
+        compound.put("OT", AutoNbt.serialize(OT));
+        compound.put("OT_UUID", AutoNbt.serialize(OT_UUID));
+        return compound;
+    }
+    
+    public Smab(NbtCompound compound) {
+        this.type = AutoNbt.deserialize(SmabSpecies.class, compound.get("type"));
+        this.dna = AutoNbt.deserialize(DNA.class, compound.get("dna"));
+        this.happiness = AutoNbt.deserialize(int.class, compound.get("happiness"));
+        this.individual_intelligence = AutoNbt.deserialize(int.class, compound.get("individual_intelligence"));
+        this.individual_strength = AutoNbt.deserialize(int.class, compound.get("individual_strength"));
+        this.individual_dexterity = AutoNbt.deserialize(int.class, compound.get("individual_dexterity"));
+        this.individual_vitality = AutoNbt.deserialize(int.class, compound.get("individual_vitality"));
+        this.experience = AutoNbt.deserialize(int.class, compound.get("experience"));
+        this.ability_index = AutoNbt.deserialize(int.class, compound.get("ability_index"));
+        this.heldItem = AutoNbt.deserialize(ItemStack.class, compound.get("heldItem"));
+        this.nickname = AutoNbt.deserialize(String.class, compound.get("nickname"));
+        this.OT = AutoNbt.deserialize(String.class, compound.get("OT"));
+        this.OT_UUID = AutoNbt.deserialize(UUID.class, compound.get("OT_UUID"));
+    }
+
     // private final long serial;
 
     public String getOt() {
@@ -61,7 +100,7 @@ public final class Smab {
         return this.type.id();
     }
 
-    public static ItemStack convertToItem(Smab smab) {
+    public static ItemStack convertToItem(final Smab smab) {
         ItemStack is = new ItemStack(Registries.SMABS.get(smab.type.id()).item());
         SmabItemComponent.KEY.borrowPooledComponent(is, comp->comp.smab = smab, true);
         return is;
@@ -202,7 +241,17 @@ public final class Smab {
     }
 
     public String getNickname() {
+        if (nickname.isBlank()) {
+            return "smabname." + this.getId().getNamespace() + "." + this.getId().getPath();
+        }
         return this.nickname;
+    }
+
+    public Text getNicknameText() {
+        if (nickname.isBlank()) {
+            return new TranslatableText("smabname." + this.getId().getNamespace() + "." + this.getId().getPath());
+        }
+        return new LiteralText(this.nickname);
     }
 
     private void addToVitality(int i) {

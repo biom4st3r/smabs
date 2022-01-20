@@ -1,5 +1,7 @@
 package adventurepack.mods.smab.smab;
 
+import java.util.Optional;
+
 import adventurepack.mods.smab.Registries;
 import adventurepack.mods.smab.component.SmabItemComponent;
 import adventurepack.mods.smab.minecraft.entity.SmabEntity;
@@ -22,21 +24,29 @@ public class SmabItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        boolean[] bl = {false};
-        SmabItemComponent.KEY.borrowPooledComponent(user.getStackInHand(hand), comp -> {
-            if (comp.smab == null) {
-                comp.smab = new Smab(this.species);
-                comp.smab.setOT(user);
-                bl[0] = true;
+        if (world.isClient) return TypedActionResult.success(user.getStackInHand(hand), true);
+        boolean serial = false;
+        Optional<SmabItemComponent> component = SmabItemComponent.KEY.getComponent(user.getStackInHand(hand));
+        if (component.isPresent()) {
+            if (component.get().smab == null) {
+                component.get().smab = new Smab(this.species);
+                component.get().smab.setOT(user);
+                serial = true;
             }
             if (user.isSneaking()) {
-                SmabEntity entity = new SmabEntity(Registries.SMABS.get(this.species.id()).type(), world, comp.smab);
+                SmabEntity entity = new SmabEntity(Registries.SMABS.get(this.species.id()).type(), world, component.get().smab);
                 user.getStackInHand(hand).decrement(1);
                 entity.updatePositionAndAngles(user.getX(), user.getY(), user.getZ(), user.getYaw(), user.getPitch());
                 world.spawnEntity(entity);
+                
             }
-        }, bl[0]);
+            component.get().release(serial);
+        }
 
-        return super.use(world, user, hand);
+        if (user.isSneaking()) {
+            return TypedActionResult.success(user.getStackInHand(hand), true);
+        } else {
+            return super.use(world, user, hand);
+        }
     }
 }
