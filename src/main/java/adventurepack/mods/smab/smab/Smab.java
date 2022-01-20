@@ -43,6 +43,8 @@ public final class Smab {
     private String OT = "";
     private UUID OT_UUID;
 
+    // private final long serial;
+
     public String getOt() {
         return OT;
     }
@@ -84,11 +86,12 @@ public final class Smab {
             int individual_intelligence, int individual_strength,
             int individual_dexterity, int individual_vitality,
             int experience, int ability_index, ItemStack heldItem, String nickname) {
-
+        
         Preconditions.checkNotNull(species);
         Preconditions.checkNotNull(dna);
         Preconditions.checkNotNull(heldItem);
         Preconditions.checkNotNull(nickname);
+        // this.serial = new Random(System.currentTimeMillis() >> 10).nextLong();
         this.dna = dna;
         this.type = species;
         this.ability_index = ability_index;
@@ -104,17 +107,24 @@ public final class Smab {
         this.nickname = nickname;
     }
 
-    public Smab(SmabSpecies species) {
-        this(species, DNA.getRandom(), ItemStack.EMPTY, "");
-    }
-
     public Smab(SmabSpecies species, DNA dna, ItemStack heldItem, String nickname) {
         this(species, dna, 0,0,0,0,0,0, getRandomAbility(species), heldItem, nickname);
     }
 
-    public Smab(SmabSpecies species, String nickname) {
-        this(species, DNA.getRandom(), ItemStack.EMPTY, nickname);
+    public Smab(SmabSpecies species) {
+        this(species ,DNA.getRandom(), ItemStack.EMPTY, "");
     }
+
+    // public Smab(SmabSpecies species, long serial) {
+    //     this(species, dna, ItemStack.EMPTY, "");
+    //     this.serial = serial;
+    //     DNA dna = new DNA(
+    //         (int)(serial = Long.rotateLeft(serial, DNA.BITS)) % DNA.MAX_DNA_VALUE, 
+    //         (int)(serial = Long.rotateLeft(serial, DNA.BITS)) % DNA.MAX_DNA_VALUE, 
+    //         (int)(serial = Long.rotateLeft(serial, DNA.BITS)) % DNA.MAX_DNA_VALUE, 
+    //         (int)(serial = Long.rotateLeft(serial, DNA.BITS)) % DNA.MAX_DNA_VALUE);
+    //     Mutation mutation = Mutation.create(serial);
+    // }
 
     private static int getRandomAbility(SmabSpecies species) {
         return species.abilities().length == 0 ? -1 : new Random().nextInt(species.abilities().length);

@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import adventurepack.mods.smab.autojson.AutoJson;
 import adventurepack.mods.smab.smab.Ability;
 import adventurepack.mods.smab.smab.LevelAlgorithm;
+import adventurepack.mods.smab.smab.SmabBundle;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -31,7 +32,9 @@ public class ModInit implements ModInitializer {
 		AutoJson.INSTANCE.register(LevelAlgorithm.class, (o,hint) -> AutoJson.serialize(Registries.LEVEL_ARGOS.getIdOrDefault(o)), (o,hint)->Registries.LEVEL_ARGOS.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
 		AutoJson.INSTANCE.register(Ability.class, (o,hint) -> AutoJson.serialize(Registries.ABILITIES.getIdOrDefault(o)), (o,hint)->Registries.ABILITIES.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
 		AutoJson.INSTANCE.register(EntityAttribute.class, Registry.ATTRIBUTE);
+		AutoJson.INSTANCE.register(SmabBundle.class, (o,hint) -> AutoJson.serialize(Registries.SMABS.getIdOrDefault(o)), (o,hint)->Registries.SMABS.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
 		// export_json();
+
 		SmabLoader.init();
 	}
 

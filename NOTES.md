@@ -20,10 +20,10 @@ SmabSpecies Format
 ```json5
 {
   "id": "ap_smabs:missingno",
-  "base_intelligence": 0,
-  "base_strength": 0,
-  "base_dexterity": 0,
-  "base_vitality": 0,
+  "base_intelligence": 2,
+  "base_strength": 3,
+  "base_dexterity": 2,
+  "base_vitality": 1,
   "abilities": [], // Unused no touch
   "algo": "ap_smabs:missingno", // straight_log, slow, fast, medium_fast. Identified to the level up algo you want. 
   "diet": [ // array of 
