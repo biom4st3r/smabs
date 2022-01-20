@@ -75,6 +75,8 @@ public class SmabEntity extends PathAwareEntity implements IAnimatable, Tameable
     private static final AttributeRef ARMOR = new AttributeRef(EntityAttributes.GENERIC_ARMOR, UUID.fromString("8b4039e9-b22a-4d69-9d5a-79c16b46aee7"));
     private static final AttributeRef ARMOR_TOUGHNESS = new AttributeRef(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, UUID.fromString("019251bf-75a1-49fb-9b90-18377443d66d"));
 
+
+    @SuppressWarnings({"unused"})
     public void statUpdate() {
         REFS.forEach(ref -> this.getAttributeInstance(ref.attribute()).removeModifier(ref.uuid()));
         /*
@@ -90,16 +92,16 @@ public class SmabEntity extends PathAwareEntity implements IAnimatable, Tameable
             str int
             dex vit
         */
-    EntityAttributeModifier mod_MAX_HEALTH = new EntityAttributeModifier(MAX_HEALTH.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
-    EntityAttributeModifier mod_KNOCKBACK_RESIST = new EntityAttributeModifier(KNOCKBACK_RESIST.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
-    EntityAttributeModifier mod_SPEED = new EntityAttributeModifier(SPEED.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
+        EntityAttributeModifier mod_MAX_HEALTH = new EntityAttributeModifier(MAX_HEALTH.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
+        EntityAttributeModifier mod_KNOCKBACK_RESIST = new EntityAttributeModifier(KNOCKBACK_RESIST.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
+        EntityAttributeModifier mod_SPEED = new EntityAttributeModifier(SPEED.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
 
-    EntityAttributeModifier mod_ATK_DMG = new EntityAttributeModifier(ATK_DMG.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
-    EntityAttributeModifier mod_ATK_KNOCKBACK = new EntityAttributeModifier(ATK_KNOCKBACK.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
-    EntityAttributeModifier mod_ATK_SPEED = new EntityAttributeModifier(ATK_SPEED.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
+        EntityAttributeModifier mod_ATK_DMG = new EntityAttributeModifier(ATK_DMG.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
+        EntityAttributeModifier mod_ATK_KNOCKBACK = new EntityAttributeModifier(ATK_KNOCKBACK.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
+        EntityAttributeModifier mod_ATK_SPEED = new EntityAttributeModifier(ATK_SPEED.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
 
-    EntityAttributeModifier mod_ARMOR = new EntityAttributeModifier(ARMOR.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
-    EntityAttributeModifier mod_ARMOR_TOUGHNESS = new EntityAttributeModifier(ARMOR_TOUGHNESS.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
+        EntityAttributeModifier mod_ARMOR = new EntityAttributeModifier(ARMOR.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
+        EntityAttributeModifier mod_ARMOR_TOUGHNESS = new EntityAttributeModifier(ARMOR_TOUGHNESS.uuid(), "Max Health From Stats", -1, Operation.ADDITION);
 
     }
 

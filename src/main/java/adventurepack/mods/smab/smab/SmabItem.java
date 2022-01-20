@@ -23,6 +23,7 @@ public class SmabItem extends Item {
     
 
     @Override
+    @SuppressWarnings({"deprecation"})
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if (world.isClient) return TypedActionResult.success(user.getStackInHand(hand), true);
         boolean serial = false;

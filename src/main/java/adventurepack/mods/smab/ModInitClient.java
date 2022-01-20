@@ -39,6 +39,7 @@ public class ModInitClient implements ClientModInitializer {
         builder.vertex(matrix, (float)endX, (float)endY, (float)z).color(k, l, m, j).next();
     }
 
+    @SuppressWarnings({"resource"})
     public static void renderSmabToolTip(MatrixStack matrices, Smab smab, int x, int y) {
         
         int box_width = 50;

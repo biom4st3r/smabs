@@ -49,6 +49,7 @@ public class ModInit implements ModInitializer {
 		SmabLoader.init();
 	}
 
+	@SuppressWarnings({"unused"})
 	private static void export_json() {
 		JsonObject obj = AutoJson.serialize(Smabs.MISSINGNO_TEST_BUNDLE);
 		File file = new File("test.json");
