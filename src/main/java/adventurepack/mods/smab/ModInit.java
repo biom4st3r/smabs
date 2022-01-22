@@ -8,6 +8,7 @@ import java.util.UUID;
 import com.google.gson.JsonObject;
 
 import adventurepack.mods.smab.autojson.AutoJson;
+import adventurepack.mods.smab.minecraft.GuiItem;
 import adventurepack.mods.smab.smab.Ability;
 import adventurepack.mods.smab.smab.LevelAlgorithm;
 import adventurepack.mods.smab.smab.Smab;
@@ -31,6 +32,7 @@ public class ModInit implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		Registry.register(Registry.ITEM, new Identifier(MODID, "templatinggui"), new GuiItem());
 		GeckoLib.initialize();
 		Smabs.classLoad();
 		AutoJson.INSTANCE.register(LevelAlgorithm.class, (o,hint) -> AutoJson.serialize(Registries.LEVEL_ARGOS.getIdOrDefault(o)), (o,hint)->Registries.LEVEL_ARGOS.getOrDefault(AutoJson.deserialize(Identifier.class, o)));

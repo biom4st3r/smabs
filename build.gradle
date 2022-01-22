@@ -43,6 +43,10 @@ repositories {
     }
     maven {
         url "https://maven.terraformersmc.com/"
+    }   
+	maven {
+        name = "CottonMC"
+        url = "https://server.bbkr.space/artifactory/libs-release"
     }
 	maven { 
 		name "GeckoLib"
@@ -62,11 +66,14 @@ dependencies {
 	//https://github.com/CottonMC/Cotton/wiki
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+    modImplementation include("io.github.cottonmc:LibGui:5.3.0+1.18")
+
 	// modImplementation "biom4st3r.libs.biow0rks:reflection:${project.biow0rks_reflection}"
 	// include "biom4st3r.libs.biow0rks:reflection:${project.biow0rks_reflection}"
 	modImplementation "biom4st3r.libs.biow0rks:base:${project.biow0rks_base}"
 	include "biom4st3r.libs.biow0rks:base:${project.biow0rks_base}"
-
+	modImplementation "biom4st3r.libs.biow0rks:reflection:0.1.4"
+	include "biom4st3r.libs.biow0rks:reflection:0.1.4"
 	modImplementation "software.bernie.geckolib:geckolib-fabric-1.18:${project.gecko_lib}"
 
 	modImplementation "dev.emi:trinkets:${trinkets_version}"

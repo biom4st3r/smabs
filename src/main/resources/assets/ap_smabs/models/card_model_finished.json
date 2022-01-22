@@ -1,0 +1,97 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "ap_smabs:cards/redstonedust",
+		"1": "ap_smabs:cards/cardback",
+		"particle": "ap_smabs:cards/redstonedust"
+	},
+	"elements": [
+		{
+			"name": "redstonedust_0",
+			"from": [0.66667, 0, 0],
+			"to": [15.33333, 0.66667, 20],
+			"faces": {
+				"north": {"uv": [15.33333, 0, 0.66667, 0.53333], "texture": "#0"},
+				"east": {"uv": [14.66667, 0, 15.33333, 16], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [0.66667, 15.46667, 15.33333, 16], "texture": "#0"},
+				"west": {"uv": [0.66667, 0, 1.33333, 16], "rotation": 270, "texture": "#0"},
+				"up": {"uv": [0.66667, 0, 15.33333, 16], "texture": "#0"},
+				"down": {"uv": [0, 16, 16, 0], "texture": "#1"}
+			}
+		},
+		{
+			"name": "redstonedust_1",
+			"from": [0, 0, 0.66667],
+			"to": [0.66667, 0.66667, 19.33333],
+			"faces": {
+				"north": {"uv": [0.66667, 0.53333, 0, 1.06667], "texture": "#0"},
+				"east": {"uv": [0, 0.53333, 0.66667, 15.46667], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [0, 14.93333, 0.66667, 15.46667], "texture": "#0"},
+				"west": {"uv": [0, 0.53333, 0.66667, 15.46667], "rotation": 270, "texture": "#0"},
+				"up": {"uv": [0, 0.53333, 0.66667, 15.46667], "texture": "#0"},
+				"down": {"uv": [0, 15.46667, 0.66667, 0.53333], "texture": "#1"}
+			}
+		},
+		{
+			"name": "redstonedust_2",
+			"from": [15.33333, 0, 0.66667],
+			"to": [16, 0.66667, 19.33333],
+			"faces": {
+				"north": {"uv": [16, 0.53333, 15.33333, 1.06667], "texture": "#0"},
+				"east": {"uv": [15.33333, 0.53333, 16, 15.46667], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [15.33333, 14.93333, 16, 15.46667], "texture": "#0"},
+				"west": {"uv": [15.33333, 0.53333, 16, 15.46667], "rotation": 270, "texture": "#0"},
+				"up": {"uv": [15.33333, 0.53333, 16, 15.46667], "texture": "#0"},
+				"down": {"uv": [15.33333, 15.46667, 16, 0.53333], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [101.5, 0, 0],
+			"translation": [0, 1.75, 3.25],
+			"scale": [0.21289, 0.21289, 0.21289]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [101.5, 0, 0],
+			"translation": [0, 1.75, 3.25],
+			"scale": [0.218, 0.218, 0.218]
+		},
+		"firstperson_righthand": {
+			"rotation": [90.5, 0.21, 28.25],
+			"translation": [2.25, 1.5, 0],
+			"scale": [0.39844, 0.50977, 0.50977]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-92.37, 1.84, -38.46],
+			"translation": [1.25, 1.25, -1],
+			"scale": [-0.44531, -0.6543, -0.61328]
+		},
+		"ground": {
+			"rotation": [110.34, -10.16, -112.02],
+			"translation": [2, 0, -0.75],
+			"scale": [0.23438, 0.23438, 0.23438]
+		},
+		"gui": {
+			"rotation": [100.09, -7.41, 1.35],
+			"scale": [0.68555, 0.68555, 0.68555]
+		},
+		"head": {
+			"rotation": [93.07, 13.15, 179.26],
+			"translation": [0, 0, -13.5]
+		},
+		"fixed": {
+			"rotation": [90, 0.25, 180],
+			"translation": [0, 1.25, -3.5],
+			"scale": [0.42383, 0.42383, 0.42383]
+		}
+	},
+	"groups": [
+		{
+			"name": "redstonedust",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2]
+		}
+	]
+}

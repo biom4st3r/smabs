@@ -5,9 +5,12 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import adventurepack.mods.smab.minecraft.TemplatingGui;
 import adventurepack.mods.smab.smab.Smab;
 import adventurepack.mods.smab.smab.SmabItem;
+import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
@@ -17,6 +20,7 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
 
 /**
@@ -26,7 +30,23 @@ public class ModInitClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        ModelLoadingRegistry.INSTANCE.registerModelProvider((manager,out) -> {
+            Identifier id = new Identifier(ModInit.MODID, "card_model_finished");
+            out.accept(id);
+        });
 
+        ModelLoadingRegistry.INSTANCE.registerVariantProvider(manager -> (modelId, context) -> {
+            if (modelId.getPath().equals("templatinggui")) {
+                return context.loadModel(new Identifier(ModInit.MODID, "card_model_finished"));
+            }
+            return null;
+        });
+    }
+
+
+
+    public static void openGui() {
+        MinecraftClient.getInstance().setScreen(new CottonClientScreen(new TemplatingGui()));
     }
 
     protected static void fillGradient(Matrix4f matrix, BufferBuilder builder, int startX, int startY, int endX, int endY, int z, int colorStart, int colorEnd) {

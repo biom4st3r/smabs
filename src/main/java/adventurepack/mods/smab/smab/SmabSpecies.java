@@ -3,7 +3,6 @@ package adventurepack.mods.smab.smab;
 import java.util.Map;
 import java.util.Set;
 
-import biom4st3r.libs.biow0rks.autojson.AutoJson.AutoSerialize;
 import net.minecraft.item.Item;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -17,8 +16,6 @@ public record SmabSpecies(
         int base_vitality,
         Ability[] abilities,
         LevelAlgorithm algo,
-        @AutoSerialize(mapKeyHint = Item.class, mapValHint = DietaryEffect.class)
-        @biom4st3r.libs.biow0rks.autonbt.AutoNbt.AutoSerialize(mapKeyHint = Item.class, mapValHint = DietaryEffect.class)
         Map<Item,DietaryEffect> diet,
         /**
          * Shouldn't be checked directly. Allow the Smab instance to add it own stuff
