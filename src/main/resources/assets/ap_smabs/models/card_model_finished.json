@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "ap_smabs:cards/redstonedust",
-		"1": "ap_smabs:cards/cardback",
+		"1": "ap_smabs:cards/back_card",
 		"particle": "ap_smabs:cards/redstonedust"
 	},
 	"elements": [

@@ -1,8 +1,12 @@
 package adventurepack.mods.smab;
 
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import adventurepack.mods.smab.minecraft.TemplatingGui;
@@ -11,6 +15,9 @@ import adventurepack.mods.smab.smab.SmabItem;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
+import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
@@ -18,10 +25,14 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.text.OrderedText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.profiler.Profiler;
 
 /**
  * ModInitClient
@@ -40,6 +51,29 @@ public class ModInitClient implements ClientModInitializer {
                 return context.loadModel(new Identifier(ModInit.MODID, "card_model_finished"));
             }
             return null;
+        });
+
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new IdentifiableResourceReloadListener() {
+            @Override
+            public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager,
+                    Profiler prepareProfiler, Profiler applyProfiler, Executor prepareExecutor,
+                    Executor applyExecutor) {
+                return CompletableFuture.runAsync(()-> {
+                    Set<Identifier> ids = Sets.newHashSet();
+                    manager.findResources("textures/cards", s->s.endsWith(".png")).forEach(id -> {
+                        ids.add(id);
+                    });
+                    ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlas,registry) -> {
+                        ids.forEach(registry::register);
+                    });
+                }, applyExecutor).thenCompose(synchronizer::whenPrepared);
+            }
+
+            @Override
+            public Identifier getFabricId() {
+                return new Identifier(ModInit.MODID, "reloader");
+            }
+            
         });
     }
 
