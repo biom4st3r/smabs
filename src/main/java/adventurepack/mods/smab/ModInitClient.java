@@ -10,6 +10,8 @@ import com.google.common.collect.Sets;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import adventurepack.mods.smab.minecraft.TemplatingGui;
+import adventurepack.mods.smab.minecraft.client.itemodel.CardModel;
+import adventurepack.mods.smab.minecraft.client.itemodel.JsonItemDefinition;
 import adventurepack.mods.smab.smab.Smab;
 import adventurepack.mods.smab.smab.SmabItem;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
@@ -25,6 +27,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.resource.ResourceManager;
@@ -38,17 +41,30 @@ import net.minecraft.util.profiler.Profiler;
  * ModInitClient
  */
 public class ModInitClient implements ClientModInitializer {
+    public static final Identifier CARD_MODEL_ID = new Identifier(ModInit.MODID, "card_model_finished");
+    public static UnbakedModel CARD_MODEL;
 
     @Override
     public void onInitializeClient() {
         ModelLoadingRegistry.INSTANCE.registerModelProvider((manager,out) -> {
-            Identifier id = new Identifier(ModInit.MODID, "card_model_finished");
-            out.accept(id);
+            out.accept(CARD_MODEL_ID);
         });
 
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(manager -> (modelId, context) -> {
             if (modelId.getPath().equals("templatinggui")) {
-                return context.loadModel(new Identifier(ModInit.MODID, "card_model_finished"));
+                UnbakedModel model = context.loadModel(CARD_MODEL_ID);
+                CARD_MODEL = model;
+                return model;
+            }
+            return null;
+        });
+
+        ModelLoadingRegistry.INSTANCE.registerVariantProvider(manager -> (modelId, context) -> {
+            Identifier id = new Identifier(modelId.getNamespace(), modelId.getPath());
+            JsonItemDefinition def = ItemLoader.MAP.get(id);
+            if (def != null) {
+                ItemLoader.MAP.remove(id);
+                return new CardModel(def);
             }
             return null;
         });
@@ -61,8 +77,9 @@ public class ModInitClient implements ClientModInitializer {
                 return CompletableFuture.runAsync(()-> {
                     Set<Identifier> ids = Sets.newHashSet();
                     manager.findResources("textures/cards", s->s.endsWith(".png")).forEach(id -> {
-                        ids.add(id);
+                        ids.add(new Identifier(id.getNamespace(), id.getPath().replace("textures/", "").replace(".png", "")));
                     });
+
                     ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlas,registry) -> {
                         ids.forEach(registry::register);
                     });

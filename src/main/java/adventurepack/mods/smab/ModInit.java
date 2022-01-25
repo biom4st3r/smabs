@@ -1,11 +1,14 @@
 package adventurepack.mods.smab;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import adventurepack.mods.smab.autojson.AutoJson;
 import adventurepack.mods.smab.minecraft.GuiItem;
@@ -14,10 +17,14 @@ import adventurepack.mods.smab.smab.LevelAlgorithm;
 import adventurepack.mods.smab.smab.Smab;
 import adventurepack.mods.smab.smab.SmabBundle;
 import biom4st3r.libs.biow0rks.autonbt.AutoNbt;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -25,14 +32,21 @@ import software.bernie.geckolib3.GeckoLib;
 
 public class ModInit implements ModInitializer {
 
+	
+
 	public static final boolean disable_animations = true;
 
+	public static Item TEMPLATE = null;
 	public static final String MODID = "ap_smabs";
-	public static final ItemGroup SMABS_GROUP = FabricItemGroupBuilder.create(new Identifier(MODID,"item_group")).build();
+	public static final ItemGroup SMABS_GROUP = FabricItemGroupBuilder
+		.create(new Identifier(MODID,"item_group"))
+		.icon(()-> new ItemStack(TEMPLATE))
+		.build();
+
 
 	@Override
 	public void onInitialize() {
-		Registry.register(Registry.ITEM, new Identifier(MODID, "templatinggui"), new GuiItem());
+		TEMPLATE = Registry.register(Registry.ITEM, new Identifier(MODID, "templatinggui"), new GuiItem());
 		GeckoLib.initialize();
 		Smabs.classLoad();
 		AutoJson.INSTANCE.register(LevelAlgorithm.class, (o,hint) -> AutoJson.serialize(Registries.LEVEL_ARGOS.getIdOrDefault(o)), (o,hint)->Registries.LEVEL_ARGOS.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
@@ -47,8 +61,15 @@ public class ModInit implements ModInitializer {
 		AutoNbt.INSTANCE.register(Smab.class, (o,hint) -> o.serialize(), (o,hint) -> new Smab(o));
 		AutoNbt.INSTANCE.register(UUID.class, (o,hint) -> NbtString.of(o.toString()), (o,hint) -> UUID.fromString(o.asString()));
 		// export_json();
-
 		SmabLoader.init();
+		try {
+			ItemLoader.init();
+		} catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+			ItemLoader.MAP.clear();
+		}
 	}
 
 	@SuppressWarnings({"unused"})

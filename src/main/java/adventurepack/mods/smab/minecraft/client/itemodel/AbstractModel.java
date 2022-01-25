@@ -20,14 +20,8 @@ import net.minecraft.world.BlockRenderView;
 
 public abstract class AbstractModel implements BakedModel, FabricBakedModel {
 
-    protected final Sprite sprite;
-    protected final ModelTransformation tranformation;
-    protected final ModelOverrideList overridelist;
 
-    public AbstractModel(Sprite sprite, ModelTransformation tranformation, ModelOverrideList overridelist) {
-        this.sprite = sprite;
-        this.tranformation = tranformation;
-        this.overridelist = overridelist;
+    public AbstractModel() {
     }
 
     @Override
@@ -70,18 +64,12 @@ public abstract class AbstractModel implements BakedModel, FabricBakedModel {
     }
 
     @Override
-    public Sprite getParticleSprite() {
-        return this.sprite;
-    }
+    public abstract Sprite getParticleSprite();
 
     @Override
-    public ModelTransformation getTransformation() {
-        return this.tranformation;
-    }
+    public abstract ModelTransformation getTransformation();
 
     @Override
-    public ModelOverrideList getOverrides() {
-        return this.overridelist;
-    }
+    public abstract ModelOverrideList getOverrides();
     
 }
