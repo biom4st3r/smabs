@@ -28,6 +28,7 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3f;
 
 public class CardModel extends AbstractModel implements UnbakedModel {
 
@@ -60,6 +61,9 @@ public class CardModel extends AbstractModel implements UnbakedModel {
             model.getQuads(null, null, randomSupplier.get()).forEach(quad -> {
                 emitter.fromVanilla(quad, material, quad.getFace());
                 if (i[0] == 1) {
+                    emitter.tag(i[0]++);
+                    emitter.emit();
+                    emitter.fromVanilla(quad, material, quad.getFace());
                 // TODO
                 // Determine the size of 1 unit in x and z
                 // Make a new quad somehow that is 16x16unit
@@ -91,7 +95,32 @@ public class CardModel extends AbstractModel implements UnbakedModel {
                 quad.pos(1, 0, 0.041667F, 1.25F);
                 quad.pos(2, 1, 0.041667F, 1.25F);
                 quad.pos(3, 1, 0.041667F, 0);
+                return true;
                 // If i don't do surgery here the the width is 1 unit to narrow????
+            } else if (quad.tag() == 2) {
+                Vec3f pos0 = quad.copyPos(0, null);
+                // Vec3f pos1 = quad.copyPos(1, null);
+                Vec3f pos2 = quad.copyPos(2, null);
+                // Vec3f pos3 = quad.copyPos(3, null);
+                float xunit = (pos2.getX() - pos0.getX()) / 24F;
+                float ypos = pos0.getY() + 0.0001F;
+                float zunit = 1.25F/30F;
+                
+                int x = 5;
+                int y = 4;
+                int width = 16;
+                int height = 14;
+
+                quad.pos(0, xunit*x, ypos, zunit*y);
+                quad.pos(3, xunit*(x+width), ypos, zunit*y);
+                quad.pos(1, xunit*x, ypos, zunit*(y+height));
+                quad.pos(2, xunit*(x+width), ypos, zunit*(y+height));
+
+
+                quad.sprite(0, 0, ICON.getMinU(), ICON.getMinV());
+                quad.sprite(1, 0, ICON.getMinU(), ICON.getMaxV());
+                quad.sprite(2, 0, ICON.getMaxU(), ICON.getMaxV());
+                quad.sprite(3, 0, ICON.getMaxU(), ICON.getMinV());
             }
             return true;
         });
