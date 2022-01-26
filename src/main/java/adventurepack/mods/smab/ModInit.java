@@ -25,8 +25,6 @@ import software.bernie.geckolib3.GeckoLib;
 
 public class ModInit implements ModInitializer {
 
-	
-
 	public static final boolean disable_animations = true;
 
 	public static Item TEMPLATE = null;

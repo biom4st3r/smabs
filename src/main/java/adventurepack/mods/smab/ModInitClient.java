@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -28,7 +29,9 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
@@ -41,8 +44,12 @@ import net.minecraft.util.profiler.Profiler;
  * ModInitClient
  */
 public class ModInitClient implements ClientModInitializer {
+
     public static final Identifier CARD_MODEL_ID = new Identifier(ModInit.MODID, "card_model_finished");
     public static UnbakedModel CARD_MODEL;
+
+    public static final Identifier _CARD_ATLAS_ID = new Identifier(ModInit.MODID, "card_atlas");
+    public static final Identifier CARD_ATLAS_ID = new Identifier(ModInit.MODID, "textures/atlas/cards.png");
 
     @Override
     public void onInitializeClient() {
@@ -76,6 +83,9 @@ public class ModInitClient implements ClientModInitializer {
                     Executor applyExecutor) {
                 return CompletableFuture.runAsync(()-> {
                     Set<Identifier> ids = Sets.newHashSet();
+                    manager.findResources("textures/foils", s->s.endsWith(".png")).forEach(id -> {
+                        ids.add(new Identifier(id.getNamespace(), id.getPath().replace("textures/", "").replace(".png", "")));
+                    });
                     manager.findResources("textures/cards", s->s.endsWith(".png")).forEach(id -> {
                         ids.add(new Identifier(id.getNamespace(), id.getPath().replace("textures/", "").replace(".png", "")));
                     });
@@ -180,6 +190,15 @@ public class ModInitClient implements ClientModInitializer {
 
         // Screen.drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, smab.getNicknameText(), x, y, 0xFFFF_FFFF);
         matrices.pop();
+    }
+
+    public static Sprite getCardSprite(Identifier id) {
+        return MinecraftClient.getInstance().getBakedModelManager().getAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).getSprite(id);
+    }
+
+
+    public static void registerAtlas(Consumer<SpriteIdentifier> adder) {
+        adder.accept(new SpriteIdentifier(CARD_ATLAS_ID, _CARD_ATLAS_ID));
     }
     
 }

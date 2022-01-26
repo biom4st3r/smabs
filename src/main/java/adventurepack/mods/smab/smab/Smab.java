@@ -278,7 +278,7 @@ public final class Smab {
         return this.type.diet().keySet().toArray(Item[]::new);
     }
 
-    public boolean hasTag(Tag t) {
+    public boolean hasTag(BetterTag t) {
         return this.type.tags().contains(t);
     }
 }

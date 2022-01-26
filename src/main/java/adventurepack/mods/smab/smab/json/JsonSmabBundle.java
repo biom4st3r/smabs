@@ -6,10 +6,10 @@ import com.google.common.collect.Sets;
 import adventurepack.mods.smab.ModInit;
 import adventurepack.mods.smab.minecraft.entity.SmabEntity;
 import adventurepack.mods.smab.smab.Ability;
+import adventurepack.mods.smab.smab.BetterTag;
 import adventurepack.mods.smab.smab.LevelAlgorithm;
 import adventurepack.mods.smab.smab.SmabBundle;
 import adventurepack.mods.smab.smab.SmabSpecies;
-import adventurepack.mods.smab.smab.Tag;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;
@@ -33,7 +33,7 @@ public record JsonSmabBundle(
     /**
      * Shouldn't be checked directly. Allow the Smab instance to add it own stuff
      */
-    Tag[] tags,
+    BetterTag[] tags,
     boolean has_entity,
     // END OF SMAB_SPECIES
     float entity_dimension_width,

@@ -15,7 +15,6 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.ModelLoader;
@@ -23,7 +22,6 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -46,63 +44,7 @@ public class CardModel extends AbstractModel implements UnbakedModel {
     @Override
     public void emitItemQuads(ItemStack stack, java.util.function.Supplier<Random> randomSupplier,
             RenderContext context) {
-        if (mesh == null) {
-            Identifier card_id = new Identifier(def.card_icon().getNamespace(), def.card_icon().getPath().replace("textures/", "").replace(".png", ""));
-            // Identifier card_id = new Identifier("ap_smabs:cards/integral_interior_card");
-            CARD_BACKGROUND = MinecraftClient.getInstance().getBakedModelManager().getAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).getSprite(card_id);
-            ICON = MinecraftClient.getInstance().getBakedModelManager().getAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).getSprite(def.sprite_icon());
-            MeshBuilder builder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
-            QuadEmitter emitter = builder.getEmitter();
-            RenderMaterial material = RendererAccess.INSTANCE.getRenderer().materialFinder().find();
-            for (Direction dir : Direction.values()) {
-                model.getQuads(null, dir, randomSupplier.get()).forEach(quad -> emitter.fromVanilla(quad, material, quad.getFace()));
-            }
-            int[] i = {0};
-            model.getQuads(null, null, randomSupplier.get()).forEach(quad -> {
-                emitter.fromVanilla(quad, material, quad.getFace());
-                if (i[0] == 1) {
-                    emitter.sprite(0, 0, CARD_BACKGROUND.getMinU(), CARD_BACKGROUND.getMinV());
-                    emitter.sprite(1, 0, CARD_BACKGROUND.getMinU(), CARD_BACKGROUND.getMaxV());
-                    emitter.sprite(2, 0, CARD_BACKGROUND.getMaxU(), CARD_BACKGROUND.getMaxV());
-                    emitter.sprite(3, 0, CARD_BACKGROUND.getMaxU(), CARD_BACKGROUND.getMinV());
-    
-                    emitter.pos(0, 0, 0.041667F, 0);
-                    emitter.pos(1, 0, 0.041667F, 1.25F);
-                    emitter.pos(2, 1, 0.041667F, 1.25F);
-                    emitter.pos(3, 1, 0.041667F, 0);
-                    emitter.tag(i[0]++);
-                    emitter.emit();
-                    // If i don't do surgery here the the width is 1 unit to narrow????
-                    emitter.fromVanilla(quad, material, quad.getFace());
-                    Vec3f pos0 = emitter.copyPos(0, null);
-                    // Vec3f pos1 = quad.copyPos(1, null);
-                    Vec3f pos2 = emitter.copyPos(2, null);
-                    // Vec3f pos3 = quad.copyPos(3, null);
-                    float xunit = (pos2.getX() - pos0.getX()) / 24F;
-                    float ypos = pos0.getY() + 0.0001F;
-                    float zunit = pos2.getZ()/30F;
-                    
-                    int x = 5;
-                    int y = 4;
-                    int width = 16;
-                    int height = 14;
-    
-                    emitter.pos(0, xunit*x, ypos, zunit*y);
-                    emitter.pos(3, xunit*(x+width), ypos, zunit*y);
-                    emitter.pos(1, xunit*x, ypos, zunit*(y+height));
-                    emitter.pos(2, xunit*(x+width), ypos, zunit*(y+height));
-    
-    
-                    emitter.sprite(0, 0, ICON.getMinU(), ICON.getMinV());
-                    emitter.sprite(1, 0, ICON.getMinU(), ICON.getMaxV());
-                    emitter.sprite(2, 0, ICON.getMaxU(), ICON.getMaxV());
-                    emitter.sprite(3, 0, ICON.getMaxU(), ICON.getMinV());
-                }
-                emitter.tag(i[0]++);
-                emitter.emit();
-            });
-            mesh = builder.build();
-        }
+        attemptInitMesh(randomSupplier);
         // 0 back
         // 1 front
 
@@ -115,7 +57,100 @@ public class CardModel extends AbstractModel implements UnbakedModel {
         */
 
         context.meshConsumer().accept(mesh);
-        // mesh = null;
+        mesh = null;
+    }
+
+
+    public static final RenderMaterial MATERIAL = RendererAccess.INSTANCE.getRenderer().materialFinder().find();
+
+    private void attemptInitMesh(java.util.function.Supplier<Random> randomSupplier) {
+        if (mesh == null) {
+            Identifier card_id = new Identifier(def.card_icon().getNamespace(), def.card_icon().getPath().replace("textures/", "").replace(".png", ""));
+            // Identifier card_id = new Identifier("ap_smabs:cards/integral_interior_card");
+            CARD_BACKGROUND = ModInitClient.getCardSprite(card_id);
+            ICON = ModInitClient.getCardSprite(def.sprite_icon());
+            MeshBuilder builder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
+            QuadEmitter emitter = builder.getEmitter();
+            for (Direction dir : Direction.values()) {
+                model.getQuads(null, dir, randomSupplier.get()).forEach(quad -> emitter.fromVanilla(quad, MATERIAL, quad.getFace()));
+            }
+            int[] i = {0};
+            model.getQuads(null, null, randomSupplier.get()).forEach(quad -> {
+                if (i[0] == 1) {
+                    emitter.fromVanilla(quad, MATERIAL, quad.getFace());
+                    createCardBackground(CARD_BACKGROUND, emitter);
+                    emitter.tag(i[0]++);
+                    emitter.emit();
+
+                    emitter.fromVanilla(quad, MATERIAL, quad.getFace());
+                    createIcon(ICON, 5, 4, 16, 14, 0.0001F, emitter);
+                    emitter.tag(i[0]++);
+                    emitter.emit();
+
+                    // emitter.fromVanilla(quad, MATERIAL, quad.getFace());
+                    // createCardBackground(
+                    //     ModInitClient.getCardTexture(new Identifier(ModInit.MODID, "foils/land_and_sea_foil")), 
+                    //     emitter);
+                    // fixCardBackground(emitter,0.00005F);
+                    // setColor(0x88FFFFFF, emitter);
+                    // emitter.tag(i[0]++);
+                    // emitter.emit();
+                    
+                    
+                    return;
+                } else {
+                    emitter.fromVanilla(quad, MATERIAL, quad.getFace());
+                    emitter.tag(i[0]++);
+                    emitter.emit();
+                    return;
+                }
+
+
+            });
+            mesh = builder.build();
+        }
+    }
+
+    private void createIcon(Sprite sprite, int x, int y, int width, int height, float depth_mod, QuadEmitter emitter) {
+        Vec3f pos0 = emitter.copyPos(0, null);
+        Vec3f pos2 = emitter.copyPos(2, null);
+        float xunit = (pos2.getX() - pos0.getX()) / 24F;
+        float ypos = pos0.getY() + depth_mod;
+        float zunit = pos2.getZ()/30F;
+   
+        emitter.pos(0, xunit*x, ypos, zunit*y);
+        emitter.pos(3, xunit*(x+width), ypos, zunit*y);
+        emitter.pos(1, xunit*x, ypos, zunit*(y+height));
+        emitter.pos(2, xunit*(x+width), ypos, zunit*(y+height));
+   
+   
+        emitter.sprite(0, 0, sprite.getMinU(), sprite.getMinV());
+        emitter.sprite(1, 0, sprite.getMinU(), sprite.getMaxV());
+        emitter.sprite(2, 0, sprite.getMaxU(), sprite.getMaxV());
+        emitter.sprite(3, 0, sprite.getMaxU(), sprite.getMinV());
+    }
+
+    private void setColor(int color, QuadEmitter emitter) {
+        for (int i = 0; i < 4; i++) {
+            emitter.spriteColor(i, 0, color);
+        }
+    }
+
+    private void createCardBackground(Sprite sprite, QuadEmitter emitter) {
+        emitter.sprite(0, 0, sprite.getMinU(), sprite.getMinV());
+        emitter.sprite(1, 0, sprite.getMinU(), sprite.getMaxV());
+        emitter.sprite(2, 0, sprite.getMaxU(), sprite.getMaxV());
+        emitter.sprite(3, 0, sprite.getMaxU(), sprite.getMinV());
+   
+        fixCardBackground(emitter,0);
+    }
+
+    private void fixCardBackground(QuadEmitter emitter, float depth_mod)  {
+        emitter.pos(0, 0, 0.041667F + depth_mod, 0);
+        emitter.pos(1, 0, 0.041667F + depth_mod, 1.25F);
+        emitter.pos(2, 1, 0.041667F + depth_mod, 1.25F);
+        emitter.pos(3, 1, 0.041667F + depth_mod, 0);
+        // If i don't do surgery here the the width is 1 unit to narrow????
     }
 
     @Override

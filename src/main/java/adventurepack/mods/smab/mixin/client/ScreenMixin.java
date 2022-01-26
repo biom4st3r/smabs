@@ -1,4 +1,4 @@
-package adventurepack.mods.smab.mixin;
+package adventurepack.mods.smab.mixin.client;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

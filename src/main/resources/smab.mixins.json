@@ -5,7 +5,8 @@
   "mixins": [
   ],
   "client": [
-    "ScreenMixin"
+    "client/ScreenMixin",
+    "client/TexturedRenderLayersMxn"
   ],
   "injectors": {
     "defaultRequire": 1

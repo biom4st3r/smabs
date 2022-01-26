@@ -1,10 +1,10 @@
 package adventurepack.mods.smab;
 
 import adventurepack.mods.smab.smab.Ability;
+import adventurepack.mods.smab.smab.BetterTag;
 import adventurepack.mods.smab.smab.DietaryEffect;
 import adventurepack.mods.smab.smab.LevelAlgorithm;
 import adventurepack.mods.smab.smab.SmabBundle;
-import adventurepack.mods.smab.smab.Tag;
 import adventurepack.mods.smab.smab.json.JsonDietaryPair;
 import adventurepack.mods.smab.smab.json.JsonEntityAttributeBundle;
 import adventurepack.mods.smab.smab.json.JsonSmabBundle;
@@ -25,7 +25,7 @@ public final class Smabs {
         new Ability[0], 
         LevelAlgorithm.STRAIGHT_LOG,
         new JsonDietaryPair[] {new JsonDietaryPair(Items.DIAMOND, new DietaryEffect(-5,0,0,5))},
-        new Tag[]{},
+        new BetterTag[]{},
         false,
         2,
         4,

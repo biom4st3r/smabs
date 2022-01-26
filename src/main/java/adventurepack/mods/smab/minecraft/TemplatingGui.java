@@ -75,12 +75,25 @@ public class TemplatingGui extends LightweightGuiDescription {
         // this.ITEM_SPRITE.setImage(new Identifier(""));
     }
 
+    private static int sort(Identifier a, Identifier b) {
+        // if(a.getNamespace().equals("minecraft") && b.getNamespace().equals("minecraft")) {
+        //     return 0;
+        // } else 
+        if(!a.getNamespace().equals("minecraft")) {
+            return 1;
+        } else if(!b.getNamespace().equals("minecraft")) {
+            return -1;
+        }
+        return 0;
+    }
+ 
+
     public void updatePage(int i) {
         if (i < 1) return;
         this.page = i;
 
         int count = i-1;
-        Iterable<Identifier> ids = ()->SPRITES.keySet().stream().skip(count * 28).limit(28).iterator();
+        Iterable<Identifier> ids = ()->SPRITES.keySet().stream().sorted(TemplatingGui::sort).skip(count * 28).limit(28).iterator();
         for (WWidget w : this.icons.streamChildren().toArray(WWidget[]::new)) {
             icons.remove(w);
         }

@@ -20,7 +20,7 @@ public record SmabSpecies(
         /**
          * Shouldn't be checked directly. Allow the Smab instance to add it own stuff
          */
-        Set<Tag> tags,
+        Set<BetterTag> tags,
         boolean hasEntity
         ) {
 
