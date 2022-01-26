@@ -1,31 +1,24 @@
 package adventurepack.mods.smab;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.UUID;
 
-import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 
-import adventurepack.mods.smab.autojson.AutoJson;
 import adventurepack.mods.smab.minecraft.GuiItem;
 import adventurepack.mods.smab.smab.Ability;
 import adventurepack.mods.smab.smab.LevelAlgorithm;
 import adventurepack.mods.smab.smab.Smab;
 import adventurepack.mods.smab.smab.SmabBundle;
+import biom4st3r.libs.biow0rks.NoEx;
+import biom4st3r.libs.biow0rks.autojson.AutoJson;
 import biom4st3r.libs.biow0rks.autonbt.AutoNbt;
-import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtString;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import software.bernie.geckolib3.GeckoLib;
@@ -46,42 +39,58 @@ public class ModInit implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		TEMPLATE = Registry.register(Registry.ITEM, new Identifier(MODID, "templatinggui"), new GuiItem());
 		GeckoLib.initialize();
-		Smabs.classLoad();
-		AutoJson.INSTANCE.register(LevelAlgorithm.class, (o,hint) -> AutoJson.serialize(Registries.LEVEL_ARGOS.getIdOrDefault(o)), (o,hint)->Registries.LEVEL_ARGOS.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
-		AutoJson.INSTANCE.register(Ability.class, (o,hint) -> AutoJson.serialize(Registries.ABILITIES.getIdOrDefault(o)), (o,hint)->Registries.ABILITIES.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
-		AutoJson.INSTANCE.register(EntityAttribute.class, Registry.ATTRIBUTE);
-		AutoJson.INSTANCE.register(SmabBundle.class, (o,hint) -> AutoJson.serialize(Registries.SMABS.getIdOrDefault(o)), (o,hint)->Registries.SMABS.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
+		AutoJson.INSTANCE.register(
+			LevelAlgorithm.class, 
+			(o,hint) -> AutoJson.serialize(Registries.LEVEL_ARGOS.getIdOrDefault(o)), 
+			(o,hint)->Registries.LEVEL_ARGOS.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
+		AutoJson.INSTANCE.register(
+			Ability.class, 
+			(o,hint) -> AutoJson.serialize(Registries.ABILITIES.getIdOrDefault(o)), 
+			(o,hint)->Registries.ABILITIES.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
+		AutoJson.INSTANCE.register(
+			EntityAttribute.class, 
+			Registry.ATTRIBUTE);
+		AutoJson.INSTANCE.register(
+			SmabBundle.class, 
+			(o,hint) -> AutoJson.serialize(Registries.SMABS.getIdOrDefault(o)), 
+			(o,hint)->Registries.SMABS.getOrDefault(AutoJson.deserialize(Identifier.class, o)));
 		
-		AutoNbt.INSTANCE.register(LevelAlgorithm.class, (o,hint) -> AutoNbt.serialize(Registries.LEVEL_ARGOS.getIdOrDefault(o)), (o,hint)->Registries.LEVEL_ARGOS.getOrDefault(AutoNbt.deserialize(Identifier.class, o)));
-		AutoNbt.INSTANCE.register(Ability.class, (o,hint) -> AutoNbt.serialize(Registries.ABILITIES.getIdOrDefault(o)), (o,hint)->Registries.ABILITIES.getOrDefault(AutoNbt.deserialize(Identifier.class, o)));
-		AutoNbt.INSTANCE.register(EntityAttribute.class, Registry.ATTRIBUTE);
-		AutoNbt.INSTANCE.register(SmabBundle.class, (o,hint) -> AutoNbt.serialize(Registries.SMABS.getIdOrDefault(o)), (o,hint)->Registries.SMABS.getOrDefault(AutoNbt.deserialize(Identifier.class, o)));
-		AutoNbt.INSTANCE.register(Smab.class, (o,hint) -> o.serialize(), (o,hint) -> new Smab(o));
-		AutoNbt.INSTANCE.register(UUID.class, (o,hint) -> NbtString.of(o.toString()), (o,hint) -> UUID.fromString(o.asString()));
+		AutoNbt.INSTANCE.register(
+			LevelAlgorithm.class, 
+			(o,hint) -> AutoNbt.serialize(Registries.LEVEL_ARGOS.getIdOrDefault(o)), 
+			(o,hint)->Registries.LEVEL_ARGOS.getOrDefault(AutoNbt.deserialize(Identifier.class, o)));
+		AutoNbt.INSTANCE.register(
+			Ability.class, 
+			(o,hint) -> AutoNbt.serialize(Registries.ABILITIES.getIdOrDefault(o)), 
+			(o,hint)->Registries.ABILITIES.getOrDefault(AutoNbt.deserialize(Identifier.class, o)));
+		AutoNbt.INSTANCE.register(
+			EntityAttribute.class, 
+			Registry.ATTRIBUTE);
+		AutoNbt.INSTANCE.register(
+			SmabBundle.class, 
+			(o,hint) -> AutoNbt.serialize(Registries.SMABS.getIdOrDefault(o)), 
+			(o,hint)->Registries.SMABS.getOrDefault(AutoNbt.deserialize(Identifier.class, o)));
+		AutoNbt.INSTANCE.register(
+			Smab.class, 
+			(o,hint) -> o.serialize(), 
+			(o,hint) -> new Smab(o));
 		// export_json();
 		SmabLoader.init();
-		try {
-			ItemLoader.init();
-		} catch (JsonIOException | JsonSyntaxException | FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
-			ItemLoader.MAP.clear();
-		}
+		ItemLoader.init();
+
+		TEMPLATE = Registry.register(Registry.ITEM, new Identifier(MODID, "templatinggui"), new GuiItem());
+		Smabs.classLoad();
+
 	}
 
 	@SuppressWarnings({"unused"})
 	private static void export_json() {
 		JsonObject obj = AutoJson.serialize(Smabs.MISSINGNO_TEST_BUNDLE);
 		File file = new File("test.json");
-		try (FileOutputStream stream = new FileOutputStream(file)) {
-			stream.write(obj.toString().getBytes());
-			stream.close();
-			System.exit(0);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		FileOutputStream stream = NoEx.run(()->new FileOutputStream(file));
+		NoEx.run(()->stream.write(obj.toString().getBytes()));
+		NoEx.run(()->stream.close());
+		System.exit(0);
 	}
 }

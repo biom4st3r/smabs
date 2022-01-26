@@ -9,9 +9,9 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import adventurepack.mods.smab.autojson.AutoJson;
 import adventurepack.mods.smab.smab.SmabBundle;
 import adventurepack.mods.smab.smab.SmabSpecies;
+import biom4st3r.libs.biow0rks.autojson.AutoJson;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.item.Item;
 

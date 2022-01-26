@@ -68,8 +68,6 @@ dependencies {
 
     modImplementation include("io.github.cottonmc:LibGui:5.3.0+1.18")
 
-	// modImplementation "biom4st3r.libs.biow0rks:reflection:${project.biow0rks_reflection}"
-	// include "biom4st3r.libs.biow0rks:reflection:${project.biow0rks_reflection}"
 	modImplementation "biom4st3r.libs.biow0rks:base:${project.biow0rks_base}"
 	include "biom4st3r.libs.biow0rks:base:${project.biow0rks_base}"
 	modImplementation "biom4st3r.libs.biow0rks:reflection:0.1.4"

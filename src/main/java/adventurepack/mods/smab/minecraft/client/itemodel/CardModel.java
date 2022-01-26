@@ -80,7 +80,7 @@ public class CardModel extends AbstractModel implements UnbakedModel {
                     // Vec3f pos3 = quad.copyPos(3, null);
                     float xunit = (pos2.getX() - pos0.getX()) / 24F;
                     float ypos = pos0.getY() + 0.0001F;
-                    float zunit = 1.25F/30F;
+                    float zunit = pos2.getZ()/30F;
                     
                     int x = 5;
                     int y = 4;

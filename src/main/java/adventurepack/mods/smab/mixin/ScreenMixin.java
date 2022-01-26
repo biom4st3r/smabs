@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 
 @Mixin({Screen.class})
 public class ScreenMixin {
+
     @Inject(
         method = "renderTooltip(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/item/ItemStack;II)V",
         at = @At("HEAD"),
@@ -25,4 +26,5 @@ public class ScreenMixin {
             ci.cancel();
         }
     }
+
 }

@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import adventurepack.mods.smab.ModInit;
-import adventurepack.mods.smab.autojson.AutoJson;
 import adventurepack.mods.smab.minecraft.client.itemodel.JsonItemDefinition;
+import biom4st3r.libs.biow0rks.autojson.AutoJson;
 import biom4st3r.libs.biow0rks.reflection.FieldHandler;
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter;
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
@@ -150,9 +150,7 @@ public class TemplatingGui extends LightweightGuiDescription {
         textField.setChangedListener(string-> {
             try {
                 this.updatePage(Integer.parseInt(string));
-            } catch (Throwable t) {
-
-            }
+            } catch (Throwable t) {}
         });
         root.add(page_text_indicator, LABEL_PAGE.x, LABEL_PAGE.y, LABEL_PAGE.width, LABEL_PAGE.height);
         root.add(textField, FIELD_PAGE.x, FIELD_PAGE.y, FIELD_PAGE.width, FIELD_PAGE.height);
@@ -199,11 +197,11 @@ public class TemplatingGui extends LightweightGuiDescription {
                 root.remove(savePanel);
                 this.setRootPanel(root);
                 root.validate(this);
-                Identifier item_name = new Identifier(ModInit.MODID, field.getText());
+                Identifier item_name = new Identifier(ModInit.MODID, field.getText().toLowerCase().replace(" ", "_"));
                 JsonItemDefinition item = new JsonItemDefinition(item_name, this.rarity, this.card, this.ITEM_ICON);
                 new File("config/smab_card_items/").mkdirs();
                 File file = new File("config/smab_card_items/" + item_name.toString().replace(":", "__") + ".json");
-                // file.mkdirs();
+
                 try (FileOutputStream stream = new FileOutputStream(file)) {
                     stream.write(AutoJson.serialize(item).toString().getBytes());
                     stream.close();
@@ -212,7 +210,7 @@ public class TemplatingGui extends LightweightGuiDescription {
                 }
                 reset();
             });
-            savePanel.add(export, 1, 3,5,2);
+            savePanel.add(export, 1, 3, 5, 2);
             savePanel.validate(this);
         });
         root.add(SAVE, BUTT_SAVE.x, BUTT_SAVE.y, BUTT_SAVE.width, BUTT_SAVE.height);
