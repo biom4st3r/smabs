@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import adventurepack.mods.smab.ModInitClient;
 import adventurepack.mods.smab.component.SmabItemComponent;
-import adventurepack.mods.smab.smab.SmabItem;
+import adventurepack.mods.smab.smab.SmabCardItem;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -21,8 +21,8 @@ public class ScreenMixin {
         cancellable = true
     )
     protected void smabs$renderToolTip(MatrixStack matrices, ItemStack stack, int x, int y, CallbackInfo ci) {
-        if (stack.getItem() instanceof SmabItem) {
-            SmabItemComponent.KEY.borrowPooledComponent(stack, c -> ModInitClient.renderSmabToolTip(matrices, (SmabItem) stack.getItem(), c.smab, x, y), false);
+        if (stack.getItem() instanceof SmabCardItem) {
+            SmabItemComponent.KEY.borrowPooledComponent(stack, c -> ModInitClient.renderSmabToolTip(matrices, (SmabCardItem) stack.getItem(), c.smab, x, y), false);
             ci.cancel();
         }
     }

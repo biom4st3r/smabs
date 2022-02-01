@@ -1,7 +1,7 @@
 package adventurepack.mods.smab.component;
 
 import adventurepack.mods.smab.smab.Smab;
-import adventurepack.mods.smab.smab.SmabItem;
+import adventurepack.mods.smab.smab.SmabCardItem;
 import biom4st3r.libs.biow0rks.PooledItemComponent;
 import biom4st3r.libs.biow0rks.autonbt.AutoNbt;
 import net.minecraft.item.ItemStack;
@@ -37,7 +37,7 @@ public class SmabItemComponent extends PooledItemComponent {
 
     @Override
     public boolean validItem(ItemStack i) {
-        return i.getItem() instanceof SmabItem;
+        return i.getItem() instanceof SmabCardItem;
     }
     
 }

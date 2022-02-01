@@ -2,25 +2,23 @@ package adventurepack.mods.smab.smab;
 
 import java.util.Optional;
 
+import adventurepack.mods.smab.ItemLoader.CardItem;
 import adventurepack.mods.smab.Registries;
 import adventurepack.mods.smab.component.SmabItemComponent;
 import adventurepack.mods.smab.minecraft.entity.SmabEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-public class SmabItem extends Item {
+public class SmabCardItem extends CardItem {
     public final SmabSpecies species;
 
-
-    public SmabItem(SmabSpecies species, Settings settings) {
-        super(settings);
+    public SmabCardItem(SmabSpecies species, Settings settings) {
+        super(species, settings);
         this.species = species;
     }
-    
 
     @Override
     @SuppressWarnings({"deprecation"})

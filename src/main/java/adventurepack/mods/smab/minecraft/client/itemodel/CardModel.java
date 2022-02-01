@@ -30,63 +30,67 @@ import net.minecraft.util.math.Vec3f;
 
 public class CardModel extends AbstractModel implements UnbakedModel {
 
-    private JsonItemDefinition def;
-    private static BakedModel model = null;
+    /**
+     * When enabled: this recreates the mesh every frame. 
+     * DBUGGING ONLY
+     */
+    private static boolean invalidateMesh = false;
 
-    public CardModel(JsonItemDefinition def) {
-        this.def = def;
+    /**
+     * Back face of card
+     */
+    private static final int CARD_BACK_QUAD = 0;
+    /**
+     * Front face of card
+     */
+    private static final int CARD_FACE_QUAD = 1;
+    /**
+     * item icon
+     */
+    private static final int ICON_QUAD = 2;
+    /**
+     * Foil overlay on front face
+     */
+    private static final int FOIL_QUAD = 3;
+    
+    /**
+     * From FRAPI: MaterialFinder#find "Resulting instances can and should be re-used to prevent needless memory allocation"
+     */
+    private static final RenderMaterial MATERIAL = RendererAccess.INSTANCE.getRenderer().materialFinder().find();
+
+    private static interface ItemQuadEmitter {
+        void emitItemQuads(CardModel model, ItemStack stack, java.util.function.Supplier<Random> randomSupplier,
+            RenderContext context);
     }
 
-    Mesh mesh = null;
-    Sprite CARD_BACKGROUND;
-    Sprite ICON;
-
-    @Override
-    public void emitItemQuads(ItemStack stack, java.util.function.Supplier<Random> randomSupplier,
-            RenderContext context) {
-        attemptInitMesh(randomSupplier);
-        // 0 back
-        // 1 front
-
-        /*
-        0 top left 0,0
-        1 bottom right 1,1
-        2 top right 1,0
-        3 bottom left 0,1
-
-        */
-
-        context.meshConsumer().accept(mesh);
-        mesh = null;
-    }
-
-
-    public static final RenderMaterial MATERIAL = RendererAccess.INSTANCE.getRenderer().materialFinder().find();
-
-    private void attemptInitMesh(java.util.function.Supplier<Random> randomSupplier) {
-        if (mesh == null) {
-            Identifier card_id = new Identifier(def.card_icon().getNamespace(), def.card_icon().getPath().replace("textures/", "").replace(".png", ""));
+    /**
+     * Initializes the mesh for any CardModel instance.
+     */
+    private static final ItemQuadEmitter MESH_INIT_EMITTER = (model,stack,random,ctx) -> {
+        Identifier card_id = new Identifier(model.def.card_icon().getNamespace(), model.def.card_icon().getPath().replace("textures/", "").replace(".png", ""));
             // Identifier card_id = new Identifier("ap_smabs:cards/integral_interior_card");
-            CARD_BACKGROUND = ModInitClient.getCardSprite(card_id);
-            ICON = ModInitClient.getCardSprite(def.sprite_icon());
+            model.CARD_FACE_SPRITE = ModInitClient.getCardSprite(card_id);
+            model.ICON_SPRITE = ModInitClient.getCardSprite(model.def.sprite_icon());
             MeshBuilder builder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
             QuadEmitter emitter = builder.getEmitter();
             for (Direction dir : Direction.values()) {
-                model.getQuads(null, dir, randomSupplier.get()).forEach(quad -> emitter.fromVanilla(quad, MATERIAL, quad.getFace()));
+                model.getQuads(null, dir, random.get()).forEach(quad -> emitter.fromVanilla(quad, MATERIAL, quad.getFace()));
             }
             int[] i = {0};
-            model.getQuads(null, null, randomSupplier.get()).forEach(quad -> {
-                if (i[0] == 1) {
+            model.getQuads(null, null, random.get()).forEach(quad -> {
+                // tag 1 corresponds to the front face of the card
+                if (i[0] == CARD_FACE_QUAD) {
+                    // swap the default card out
                     emitter.fromVanilla(quad, MATERIAL, quad.getFace());
-                    createCardBackground(CARD_BACKGROUND, emitter);
+                    createCardBackground(model.CARD_FACE_SPRITE, emitter);
                     emitter.tag(i[0]++);
                     emitter.emit();
-
+                    // create item icon on card
                     emitter.fromVanilla(quad, MATERIAL, quad.getFace());
-                    createIcon(ICON, 5, 4, 16, 14, 0.0001F, emitter);
+                    createIcon(model.ICON_SPRITE, 5, 4, 16, 14, 0.0001F, emitter);
                     emitter.tag(i[0]++);
                     emitter.emit();
-
+                    // // Add overlay between icon and face
                     // emitter.fromVanilla(quad, MATERIAL, quad.getFace());
                     // createCardBackground(
                     //     ModInitClient.getCardTexture(new Identifier(ModInit.MODID, "foils/land_and_sea_foil")), 
@@ -95,8 +99,7 @@ public class CardModel extends AbstractModel implements UnbakedModel {
                     // setColor(0x88FFFFFF, emitter);
                     // emitter.tag(i[0]++);
                     // emitter.emit();
-                    
-                    
+
                     return;
                 } else {
                     emitter.fromVanilla(quad, MATERIAL, quad.getFace());
@@ -104,14 +107,20 @@ public class CardModel extends AbstractModel implements UnbakedModel {
                     emitter.emit();
                     return;
                 }
-
-
             });
-            mesh = builder.build();
-        }
-    }
+            model.mesh = builder.build();
+            if (invalidateMesh) {
+                CardModel.RENDER.emitItemQuads(model, stack, random, ctx);
+            } else {
+                model.emitter = CardModel.RENDER;
+            }
+    };
 
-    private void createIcon(Sprite sprite, int x, int y, int width, int height, float depth_mod, QuadEmitter emitter) {
+    private static final ItemQuadEmitter RENDER = (model,stack,random,ctx) -> {
+        ctx.meshConsumer().accept(model.mesh);
+    };
+
+    private static void createIcon(Sprite sprite, int x, int y, int width, int height, float depth_mod, QuadEmitter emitter) {
         Vec3f pos0 = emitter.copyPos(0, null);
         Vec3f pos2 = emitter.copyPos(2, null);
         float xunit = (pos2.getX() - pos0.getX()) / 24F;
@@ -130,13 +139,14 @@ public class CardModel extends AbstractModel implements UnbakedModel {
         emitter.sprite(3, 0, sprite.getMaxU(), sprite.getMinV());
     }
 
-    private void setColor(int color, QuadEmitter emitter) {
+    @SuppressWarnings({"unused"})
+    private static void setColor(int color, QuadEmitter emitter) {
         for (int i = 0; i < 4; i++) {
             emitter.spriteColor(i, 0, color);
         }
     }
 
-    private void createCardBackground(Sprite sprite, QuadEmitter emitter) {
+    private static void createCardBackground(Sprite sprite, QuadEmitter emitter) {
         emitter.sprite(0, 0, sprite.getMinU(), sprite.getMinV());
         emitter.sprite(1, 0, sprite.getMinU(), sprite.getMaxV());
         emitter.sprite(2, 0, sprite.getMaxU(), sprite.getMaxV());
@@ -145,12 +155,45 @@ public class CardModel extends AbstractModel implements UnbakedModel {
         fixCardBackground(emitter,0);
     }
 
-    private void fixCardBackground(QuadEmitter emitter, float depth_mod)  {
+    private static void fixCardBackground(QuadEmitter emitter, float depth_mod)  {
         emitter.pos(0, 0, 0.041667F + depth_mod, 0);
         emitter.pos(1, 0, 0.041667F + depth_mod, 1.25F);
         emitter.pos(2, 1, 0.041667F + depth_mod, 1.25F);
         emitter.pos(3, 1, 0.041667F + depth_mod, 0);
         // If i don't do surgery here the the width is 1 unit to narrow????
+    }
+    // END OF STATIC
+
+
+    /**
+     * Provides the icon and front face sprites
+     */
+    private final JsonItemDefinition def;
+    /**
+     * cached mesh of modified card
+     */
+    private Mesh mesh = null;
+    private Sprite CARD_FACE_SPRITE;
+    private Sprite ICON_SPRITE;
+
+    public CardModel(JsonItemDefinition def) {
+        this.def = def;
+    }
+
+    /**
+     * Over engineering in progress<p>
+     * this is the actual method/lambda that handles emitting quads.
+     * MESH_INIT_EMITTER automatically swap `this.emitter`  RENDER
+     * emitter when the mesh is generated.<p>
+     * 
+     * This avoids branching once the mesh is created
+     */
+    private ItemQuadEmitter emitter = MESH_INIT_EMITTER;
+
+    @Override
+    public void emitItemQuads(ItemStack stack, java.util.function.Supplier<Random> randomSupplier,
+            RenderContext context) {
+        this.emitter.emitItemQuads(this, stack, randomSupplier, context);
     }
 
     @Override
@@ -178,6 +221,13 @@ public class CardModel extends AbstractModel implements UnbakedModel {
             Set<Pair<String, String>> unresolvedTextureReferences) {
         return Collections.emptyList();
     }
+
+    /**
+     * Initlized during the first bake of ANY CardModel. 
+     * The same model is used for all cards, then processed during
+     * the individual instances first render
+     */
+    private static BakedModel model = null;
 
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter,

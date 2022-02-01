@@ -11,11 +11,12 @@ import adventurepack.mods.smab.ItemLoader.CardItem;
 import biom4st3r.libs.biow0rks.BioLogger;
 import biom4st3r.libs.biow0rks.autojson.AutoJson;
 import net.minecraft.item.Item;
+import net.minecraft.util.Rarity;
 
 public final class BetterTag {
     private static final BioLogger logger = new BioLogger("SMAB_TAGS");
     private static final Map<String, BetterTag> TAGS = Maps.newHashMap();
-    private String name;
+    private final String name;
     public static final BetterTag 
         COMMON = new BetterTag("common"),
         UNCOMMON = new BetterTag("uncommon"),
@@ -34,16 +35,23 @@ public final class BetterTag {
         typical_treassures = new BetterTag("typical_treassures")
     ;
 
+    public static BetterTag[] values() {
+        return TAGS.values().toArray(BetterTag[]::new);
+    }
 
     private BetterTag(String string) {
         this.name = string;
         TAGS.put(this.name, this);
     }
 
+    public static BetterTag valueOf(String s) {
+        return getOrCreate(s);
+    }
+
     public static BetterTag getOrCreate(String s) {
         BetterTag tag = TAGS.get(s);
         if (tag != null) return tag;
-        logger.error("NEW TAG %s CREATED!", s);
+        logger.error("\n\nNEW TAG %s CREATED!\n\n", s);
         return new BetterTag(s);
     }
 
@@ -55,11 +63,23 @@ public final class BetterTag {
     public static Set<BetterTag> getTags(Item item) {
         if (item instanceof CardItem card) {
             
-        } else if (item instanceof SmabItem smab) {
+        } else if (item instanceof SmabCardItem smab) {
             return smab.species.tags();
         }
         return Collections.emptySet();
     }
+
+    public static Rarity getRarity(Set<BetterTag> set) {
+        if (set.contains(UNCOMMON)) {
+            return Rarity.UNCOMMON;
+        } else if (set.contains(RARE)) {
+            return Rarity.RARE;
+        } else if (set.contains(EPIC)) {
+            return Rarity.EPIC;
+        } else {
+            return Rarity.COMMON;
+        }
+    } 
 
     static {
         AutoJson.INSTANCE.register(BetterTag.class, (o,hints)->new JsonPrimitive(o.name), (o,hints)->getOrCreate(o.getAsString()));

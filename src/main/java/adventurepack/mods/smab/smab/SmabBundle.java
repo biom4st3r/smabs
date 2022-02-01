@@ -1,5 +1,6 @@
 package adventurepack.mods.smab.smab;
 
+import adventurepack.mods.smab.ItemLoader.CardItem;
 import adventurepack.mods.smab.ModInit;
 import adventurepack.mods.smab.Registries;
 import adventurepack.mods.smab.minecraft.entity.SmabEntity;
@@ -17,8 +18,8 @@ import net.minecraft.util.registry.Registry;
 /**
  * Fully handles registration
  */
-public record SmabBundle(SmabSpecies species, EntityType<SmabEntity> type, Item item) {
-    public SmabBundle(SmabSpecies species, EntityType<SmabEntity> type, Item item) {
+public record SmabBundle(SmabSpecies species, EntityType<SmabEntity> type, CardItem item) {
+    public SmabBundle(SmabSpecies species, EntityType<SmabEntity> type, CardItem item) {
         this.species = species;
         this.type = type;
         this.item = item;
@@ -32,7 +33,7 @@ public record SmabBundle(SmabSpecies species, EntityType<SmabEntity> type, Item 
     }
 
     public SmabBundle(SmabSpecies species, FabricEntityTypeBuilder<SmabEntity> builder, Item.Settings settings) {
-        this(species, builder.entityFactory((type,world) -> new SmabEntity(type, world, species)).build(), new SmabItem(species, settings.maxCount(1).group(ModInit.SMABS_GROUP)));
+        this(species, builder.entityFactory((type,world) -> new SmabEntity(type, world, species)).build(), new SmabCardItem(species, settings.maxCount(1).group(ModInit.SMABS_GROUP)));
     }
 
     // public static <T extends FabricEntityTypeBuilder<SmabEntity>> SmabBundle<T> create(SmabSpecies species, T builder) {

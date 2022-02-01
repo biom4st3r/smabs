@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import adventurepack.mods.smab.ModInit;
+import adventurepack.mods.smab.ModInitClient;
 import adventurepack.mods.smab.minecraft.client.itemodel.JsonItemDefinition;
 import biom4st3r.libs.biow0rks.autojson.AutoJson;
 import biom4st3r.libs.biow0rks.reflection.FieldHandler;
@@ -48,7 +49,7 @@ public class TemplatingGui extends LightweightGuiDescription {
 
 
     private static final FieldHandler<Map<Identifier,Sprite>> SpriteAtlasTexture$SPRITES = FieldHandler.get(SpriteAtlasTexture.class, f->f.getType()==Map.class);
-    private Map<Identifier,Sprite> SPRITES = SpriteAtlasTexture$SPRITES.get(MinecraftClient.getInstance().getBakedModelManager().getAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE));
+    private Map<Identifier,Sprite> SPRITES = SpriteAtlasTexture$SPRITES.get(MinecraftClient.getInstance().getBakedModelManager().getAtlas(ModInitClient.BLOCK_ATLAS_TEXTURE));
 
     public record SizePos(int x, int y, int width, int height){}
 
@@ -142,9 +143,6 @@ public class TemplatingGui extends LightweightGuiDescription {
         setRootPanel(root);
         root.setSize(PANEL_ROOT.width, PANEL_ROOT.height);
 
-        // SPRITES.keySet().stream().limit(10).forEach(sprite -> {
-        //     icons.add(new WSprite(sprite), 0, 0);
-        // });
         updatePage(1);
 
         icons.setBackgroundPainter(BackgroundPainter.createColorful(0xFF_22aa00));

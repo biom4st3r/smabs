@@ -1,25 +1,19 @@
 package adventurepack.mods.smab;
 
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import adventurepack.mods.smab.minecraft.TemplatingGui;
 import adventurepack.mods.smab.minecraft.client.itemodel.CardModel;
 import adventurepack.mods.smab.minecraft.client.itemodel.JsonItemDefinition;
 import adventurepack.mods.smab.smab.Smab;
-import adventurepack.mods.smab.smab.SmabItem;
+import adventurepack.mods.smab.smab.SmabCardItem;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
-import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
@@ -33,12 +27,10 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.OrderedText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.profiler.Profiler;
 
 /**
  * ModInitClient
@@ -47,6 +39,9 @@ public class ModInitClient implements ClientModInitializer {
 
     public static final Identifier CARD_MODEL_ID = new Identifier(ModInit.MODID, "card_model_finished");
     public static UnbakedModel CARD_MODEL;
+
+    @SuppressWarnings({"deprecation"})
+    public static final Identifier BLOCK_ATLAS_TEXTURE = SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
 
     public static final Identifier _CARD_ATLAS_ID = new Identifier(ModInit.MODID, "card_atlas");
     public static final Identifier CARD_ATLAS_ID = new Identifier(ModInit.MODID, "textures/atlas/cards.png");
@@ -76,32 +71,7 @@ public class ModInitClient implements ClientModInitializer {
             return null;
         });
 
-        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new IdentifiableResourceReloadListener() {
-            @Override
-            public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager,
-                    Profiler prepareProfiler, Profiler applyProfiler, Executor prepareExecutor,
-                    Executor applyExecutor) {
-                return CompletableFuture.runAsync(()-> {
-                    Set<Identifier> ids = Sets.newHashSet();
-                    manager.findResources("textures/foils", s->s.endsWith(".png")).forEach(id -> {
-                        ids.add(new Identifier(id.getNamespace(), id.getPath().replace("textures/", "").replace(".png", "")));
-                    });
-                    manager.findResources("textures/cards", s->s.endsWith(".png")).forEach(id -> {
-                        ids.add(new Identifier(id.getNamespace(), id.getPath().replace("textures/", "").replace(".png", "")));
-                    });
-
-                    ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlas,registry) -> {
-                        ids.forEach(registry::register);
-                    });
-                }, applyExecutor).thenCompose(synchronizer::whenPrepared);
-            }
-
-            @Override
-            public Identifier getFabricId() {
-                return new Identifier(ModInit.MODID, "reloader");
-            }
-            
-        });
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new ResourceLoader());
     }
 
 
@@ -126,7 +96,7 @@ public class ModInitClient implements ClientModInitializer {
     }
 
     @SuppressWarnings({"resource"})
-    public static void renderSmabToolTip(MatrixStack matrices, SmabItem item, Smab smab, int x, int y) {
+    public static void renderSmabToolTip(MatrixStack matrices, SmabCardItem item, Smab smab, int x, int y) {
         
         List<OrderedText> lines = Lists.newArrayList();
         lines.add(smab != null ? smab.getNicknameText().asOrderedText() : item.species.name().asOrderedText());
@@ -193,7 +163,7 @@ public class ModInitClient implements ClientModInitializer {
     }
 
     public static Sprite getCardSprite(Identifier id) {
-        return MinecraftClient.getInstance().getBakedModelManager().getAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).getSprite(id);
+        return MinecraftClient.getInstance().getBakedModelManager().getAtlas(ModInitClient.BLOCK_ATLAS_TEXTURE).getSprite(id);
     }
 
 
