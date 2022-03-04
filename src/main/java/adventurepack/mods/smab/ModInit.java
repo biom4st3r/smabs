@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 
 import com.google.gson.JsonObject;
 
-import adventurepack.mods.smab.minecraft.GuiItem;
+import adventurepack.mods.smab.minecraft.items.GuiItem;
 import biom4st3r.libs.biow0rks.NoEx;
 import biom4st3r.libs.biow0rks.autojson.AutoJson;
 import net.fabricmc.api.ModInitializer;
@@ -27,7 +27,6 @@ public class ModInit implements ModInitializer {
 		.create(new Identifier(MODID,"item_group"))
 		.icon(()-> new ItemStack(TEMPLATE))
 		.build();
-
 
 	@Override
 	public void onInitialize() {

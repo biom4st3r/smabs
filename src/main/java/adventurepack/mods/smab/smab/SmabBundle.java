@@ -1,11 +1,12 @@
 package adventurepack.mods.smab.smab;
 
-import adventurepack.mods.smab.ItemLoader.CardItem;
 import adventurepack.mods.smab.ModInit;
 import adventurepack.mods.smab.Registries;
 import adventurepack.mods.smab.minecraft.entity.SmabEntity;
 import adventurepack.mods.smab.minecraft.entity.SmabEntityModel;
 import adventurepack.mods.smab.minecraft.entity.SmabEntityRenderer;
+import adventurepack.mods.smab.minecraft.items.CardItem;
+import adventurepack.mods.smab.minecraft.items.SmabCardItem;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;

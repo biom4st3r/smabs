@@ -1,11 +1,12 @@
-package adventurepack.mods.smab.smab;
+package adventurepack.mods.smab.minecraft.items;
 
 import java.util.Optional;
 
-import adventurepack.mods.smab.ItemLoader.CardItem;
 import adventurepack.mods.smab.Registries;
 import adventurepack.mods.smab.component.SmabItemComponent;
 import adventurepack.mods.smab.minecraft.entity.SmabEntity;
+import adventurepack.mods.smab.smab.Smab;
+import adventurepack.mods.smab.smab.SmabSpecies;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;

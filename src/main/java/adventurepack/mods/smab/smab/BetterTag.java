@@ -7,7 +7,8 @@ import java.util.Set;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonPrimitive;
 
-import adventurepack.mods.smab.ItemLoader.CardItem;
+import adventurepack.mods.smab.minecraft.items.CardItem;
+import adventurepack.mods.smab.minecraft.items.SmabCardItem;
 import biom4st3r.libs.biow0rks.BioLogger;
 import biom4st3r.libs.biow0rks.autojson.AutoJson;
 import net.minecraft.item.Item;

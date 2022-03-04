@@ -1,7 +1,7 @@
 package adventurepack.mods.smab.component;
 
+import adventurepack.mods.smab.minecraft.items.SmabCardItem;
 import adventurepack.mods.smab.smab.Smab;
-import adventurepack.mods.smab.smab.SmabCardItem;
 import biom4st3r.libs.biow0rks.PooledItemComponent;
 import biom4st3r.libs.biow0rks.autonbt.AutoNbt;
 import net.minecraft.item.ItemStack;

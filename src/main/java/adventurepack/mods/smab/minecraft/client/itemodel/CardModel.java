@@ -28,6 +28,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3f;
 
+@SuppressWarnings({"unused"})
 public class CardModel extends AbstractModel implements UnbakedModel {
 
     /**

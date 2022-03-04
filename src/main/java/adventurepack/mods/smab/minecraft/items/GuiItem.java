@@ -1,4 +1,4 @@
-package adventurepack.mods.smab.minecraft;
+package adventurepack.mods.smab.minecraft.items;
 
 import adventurepack.mods.smab.ModInit;
 import adventurepack.mods.smab.ModInitClient;
