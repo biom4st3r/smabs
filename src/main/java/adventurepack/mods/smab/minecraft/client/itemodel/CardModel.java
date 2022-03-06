@@ -35,7 +35,7 @@ public class CardModel extends AbstractModel implements UnbakedModel {
      * When enabled: this recreates the mesh every frame. 
      * DBUGGING ONLY
      */
-    private static boolean invalidateMesh = false;
+    private static boolean invalidateMesh = true;
 
     /**
      * Back face of card
@@ -64,57 +64,61 @@ public class CardModel extends AbstractModel implements UnbakedModel {
             RenderContext context);
     }
 
+    
+
     /**
      * Initializes the mesh for any CardModel instance.
      */
     private static final ItemQuadEmitter MESH_INIT_EMITTER = (model,stack,random,ctx) -> {
         Identifier card_id = new Identifier(model.def.card_icon().getNamespace(), model.def.card_icon().getPath().replace("textures/", "").replace(".png", ""));
-            // Identifier card_id = new Identifier("ap_smabs:cards/integral_interior_card");
-            model.CARD_FACE_SPRITE = ModInitClient.getCardSprite(card_id);
-            model.ICON_SPRITE = ModInitClient.getCardSprite(model.def.sprite_icon());
-            MeshBuilder builder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
-            QuadEmitter emitter = builder.getEmitter();
-            for (Direction dir : Direction.values()) {
-                model.getQuads(null, dir, random.get()).forEach(quad -> emitter.fromVanilla(quad, MATERIAL, quad.getFace()));
-            }
-            int[] i = {0};
-            model.getQuads(null, null, random.get()).forEach(quad -> {
-                // tag 1 corresponds to the front face of the card
-                if (i[0] == CARD_FACE_QUAD) {
-                    // swap the default card out
-                    emitter.fromVanilla(quad, MATERIAL, quad.getFace());
-                    createCardBackground(model.CARD_FACE_SPRITE, emitter);
-                    emitter.tag(i[0]++);
-                    emitter.emit();
-                    // create item icon on card
-                    emitter.fromVanilla(quad, MATERIAL, quad.getFace());
-                    createIcon(model.ICON_SPRITE, 5, 4, 16, 14, 0.0001F, emitter);
-                    emitter.tag(i[0]++);
-                    emitter.emit();
-                    // // Add overlay between icon and face
-                    // emitter.fromVanilla(quad, MATERIAL, quad.getFace());
-                    // createCardBackground(
-                    //     ModInitClient.getCardTexture(new Identifier(ModInit.MODID, "foils/land_and_sea_foil")), 
-                    //     emitter);
-                    // fixCardBackground(emitter,0.00005F);
-                    // setColor(0x88FFFFFF, emitter);
-                    // emitter.tag(i[0]++);
-                    // emitter.emit();
+        // Identifier card_id = new Identifier("ap_smabs:cards/integral_interior_card");
+        
+        model.CARD_FACE_SPRITE = ModInitClient.getCardSprite(card_id);
+        model.ICON_SPRITE = ModInitClient.getCardSprite(model.def.sprite_icon());
+        MeshBuilder builder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
+        QuadEmitter emitter = builder.getEmitter();
+        for (Direction dir : Direction.values()) {
+            CardModel.BAKED_CARD_MODEL.getQuads(null, dir, random.get()).forEach(quad -> emitter.fromVanilla(quad, MATERIAL, quad.getFace()));
+        }
+        
+        int[] i = {0};
+        CardModel.BAKED_CARD_MODEL.getQuads(null, null, random.get()).forEach(quad -> {
+            // tag 1 corresponds to the front face of the card
+            if (i[0] == CARD_FACE_QUAD) {
+                // swap the default card out
+                emitter.fromVanilla(quad, MATERIAL, quad.getFace());
+                createCardBackground(model.CARD_FACE_SPRITE, emitter);
+                emitter.tag(i[0]++);
+                emitter.emit();
+                // create item icon on card
+                emitter.fromVanilla(quad, MATERIAL, quad.getFace());
+                createIcon(model.ICON_SPRITE, 5, 4, 16, 14, 0.0001F, emitter);
+                emitter.tag(i[0]++);
+                emitter.emit();
+                // // Add overlay between icon and face
+                // emitter.fromVanilla(quad, MATERIAL, quad.getFace());
+                // createCardBackground(
+                //     ModInitClient.getCardTexture(new Identifier(ModInit.MODID, "foils/land_and_sea_foil")), 
+                //     emitter);
+                // fixCardBackground(emitter,0.00005F);
+                // setColor(0x88FFFFFF, emitter);
+                // emitter.tag(i[0]++);
+                // emitter.emit();
 
-                    return;
-                } else {
-                    emitter.fromVanilla(quad, MATERIAL, quad.getFace());
-                    emitter.tag(i[0]++);
-                    emitter.emit();
-                    return;
-                }
-            });
-            model.mesh = builder.build();
-            if (invalidateMesh) {
-                CardModel.RENDER.emitItemQuads(model, stack, random, ctx);
+                return;
             } else {
-                model.emitter = CardModel.RENDER;
+                emitter.fromVanilla(quad, MATERIAL, quad.getFace());
+                emitter.tag(i[0]++);
+                emitter.emit();
+                return;
             }
+        });
+        model.mesh = builder.build();
+        if (invalidateMesh) {
+            CardModel.RENDER.emitItemQuads(model, stack, random, ctx);
+        } else {
+            model.emitter = CardModel.RENDER;
+        }
     };
 
     private static final ItemQuadEmitter RENDER = (model,stack,random,ctx) -> {
@@ -194,22 +198,23 @@ public class CardModel extends AbstractModel implements UnbakedModel {
     @Override
     public void emitItemQuads(ItemStack stack, java.util.function.Supplier<Random> randomSupplier,
             RenderContext context) {
+        // System.out.println("hello0");
         this.emitter.emitItemQuads(this, stack, randomSupplier, context);
     }
 
     @Override
     public Sprite getParticleSprite() {
-        return model.getParticleSprite();
+        return BAKED_CARD_MODEL.getParticleSprite();
     }
 
     @Override
     public ModelTransformation getTransformation() {
-        return model.getTransformation();
+        return BAKED_CARD_MODEL.getTransformation();
     }
 
     @Override
     public ModelOverrideList getOverrides() {
-        return model.getOverrides();
+        return BAKED_CARD_MODEL.getOverrides();
     }
 
     @Override
@@ -228,13 +233,13 @@ public class CardModel extends AbstractModel implements UnbakedModel {
      * The same model is used for all cards, then processed during
      * the individual instances first render
      */
-    private static BakedModel model = null;
+    private static BakedModel BAKED_CARD_MODEL = null;
 
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter,
             ModelBakeSettings rotationContainer, Identifier modelId) {
-        if (model == null) {
-            model = ModInitClient.CARD_MODEL.bake(loader, textureGetter, rotationContainer, modelId);
+        if (BAKED_CARD_MODEL == null) {
+            BAKED_CARD_MODEL = ModInitClient.CARD_MODEL.bake(loader, textureGetter, rotationContainer, modelId);
         }
         return this;
     }
