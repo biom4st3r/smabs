@@ -8,8 +8,8 @@ import java.util.Map;
 import adventurepack.mods.smab.ModInit;
 import adventurepack.mods.smab.ModInitClient;
 import adventurepack.mods.smab.minecraft.client.itemodel.JsonItemDefinition;
+import adventurepack.mods.smab.mixin.SpriteAtlasTextureAccessor;
 import biom4st3r.libs.biow0rks.autojson.AutoJson;
-import biom4st3r.libs.biow0rks.reflection.FieldHandler;
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter;
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.WButton;
@@ -22,7 +22,6 @@ import io.github.cottonmc.cotton.gui.widget.data.InputResult;
 import io.github.cottonmc.cotton.gui.widget.data.Texture;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -48,8 +47,8 @@ public class TemplatingGui extends LightweightGuiDescription {
     public int page = 1;
 
 
-    private static final FieldHandler<Map<Identifier,Sprite>> SpriteAtlasTexture$SPRITES = FieldHandler.get(SpriteAtlasTexture.class, f->f.getType()==Map.class);
-    private Map<Identifier,Sprite> SPRITES = SpriteAtlasTexture$SPRITES.get(MinecraftClient.getInstance().getBakedModelManager().getAtlas(ModInitClient.BLOCK_ATLAS_TEXTURE));
+    // private static final FieldHandler<Map<Identifier,Sprite>> SpriteAtlasTexture$SPRITES = FieldHandler.get(SpriteAtlasTexture.class, f->f.getType()==Map.class);
+    private Map<Identifier,Sprite> SPRITES = ((SpriteAtlasTextureAccessor)MinecraftClient.getInstance().getBakedModelManager().getAtlas(ModInitClient.BLOCK_ATLAS_TEXTURE)).getSprites();
 
     public record SizePos(int x, int y, int width, int height){}
 

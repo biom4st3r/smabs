@@ -70,8 +70,8 @@ dependencies {
 
 	modImplementation "biom4st3r.libs.biow0rks:base:${project.biow0rks_base}"
 	include "biom4st3r.libs.biow0rks:base:${project.biow0rks_base}"
-	modImplementation "biom4st3r.libs.biow0rks:reflection:0.1.4"
-	include "biom4st3r.libs.biow0rks:reflection:0.1.4"
+	modImplementation "biom4st3r.libs.biow0rks:reflection:${project.biow0rks_reflection}"
+	include "biom4st3r.libs.biow0rks:reflection:${project.biow0rks_reflection}"
 	modImplementation "software.bernie.geckolib:geckolib-fabric-1.18:${project.gecko_lib}"
 
 	modImplementation "dev.emi:trinkets:${trinkets_version}"
