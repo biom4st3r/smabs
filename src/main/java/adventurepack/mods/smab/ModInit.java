@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import com.google.gson.JsonObject;
 
 import adventurepack.mods.smab.minecraft.items.GuiItem;
+import adventurepack.mods.smab.resourceloaders.ItemLoader;
+import adventurepack.mods.smab.resourceloaders.SmabLoader;
 import biom4st3r.libs.biow0rks.NoEx;
 import biom4st3r.libs.biow0rks.autojson.AutoJson;
 import net.fabricmc.api.ModInitializer;
@@ -32,7 +34,29 @@ public class ModInit implements ModInitializer {
 	public void onInitialize() {
 		SerializerInit.init();
 		GeckoLib.initialize();
+		// UseItemCallback.EVENT.register((player,world,hand) -> {
+		// 	NbtCompound compound = new NbtCompound();
+		// 	player.writeNbt(compound);
+		// 	String formatted_nbt = new NbtFormater().accept(compound.toString());
+		// 	try {
+		// 		FileOutputStream i = new FileOutputStream(new File("test.hrnbt"));
+		// 		i.write(formatted_nbt.getBytes());
+		// 		i.close();
+		// 		// FileOutputStream i = new FileOutputStream(new File("test.nbt"));
+		// 		// i.write(compound.toString().getBytes());
+		// 		// i.close();
+		// 	} catch (Throwable e1) {
+		// 		// TODO Auto-generated catch block
+		// 		e1.printStackTrace();
+		// 	}
 
+		// 	try {
+		// 		player.readNbt(StringNbtReader.parse(formatted_nbt));
+		// 	} catch (CommandSyntaxException e) {
+		// 		e.printStackTrace();
+		// 	}
+		// 	return TypedActionResult.pass(null);
+		// });
 		Smabs.classLoad();
 		SmabLoader.init();
 		ItemLoader.init();

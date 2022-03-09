@@ -2,6 +2,7 @@ package adventurepack.mods.smab;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -10,6 +11,9 @@ import adventurepack.mods.smab.minecraft.TemplatingGui;
 import adventurepack.mods.smab.minecraft.client.itemodel.CardModel;
 import adventurepack.mods.smab.minecraft.client.itemodel.JsonItemDefinition;
 import adventurepack.mods.smab.minecraft.items.SmabCardItem;
+import adventurepack.mods.smab.resourceloaders.ItemLoader;
+import adventurepack.mods.smab.resourceloaders.ResourceLoader;
+import adventurepack.mods.smab.resourceloaders.SmabLoader;
 import adventurepack.mods.smab.smab.Smab;
 import adventurepack.mods.smab.smab.SmabBundle;
 import adventurepack.mods.smab.smab.attributes.BetterTag;
@@ -26,6 +30,7 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.texture.SpriteAtlasHolder;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
@@ -44,9 +49,6 @@ public class ModInitClient implements ClientModInitializer {
 
     @SuppressWarnings({"deprecation"})
     public static final Identifier BLOCK_ATLAS_TEXTURE = SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
-
-    public static final Identifier _CARD_ATLAS_ID = new Identifier(ModInit.MODID, "card_atlas");
-    public static final Identifier CARD_ATLAS_ID = new Identifier(ModInit.MODID, "textures/atlas/cards.png");
 
     @Override
     public void onInitializeClient() {
@@ -184,8 +186,8 @@ public class ModInitClient implements ClientModInitializer {
     }
 
 
-    public static void registerAtlas(Consumer<SpriteIdentifier> adder) {
-        adder.accept(new SpriteIdentifier(CARD_ATLAS_ID, _CARD_ATLAS_ID));
-    }
+    // public static void registerAtlas(Consumer<SpriteIdentifier> adder) {
+    //     adder.accept(new SpriteIdentifier(CARD_ATLAS_ID, _CARD_ATLAS_ID));
+    // }
     
 }

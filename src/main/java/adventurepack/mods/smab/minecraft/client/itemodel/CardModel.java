@@ -6,6 +6,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
+import javax.swing.Renderer;
+
 import com.mojang.datafixers.util.Pair;
 
 import adventurepack.mods.smab.ModInitClient;
@@ -68,8 +70,7 @@ public class CardModel extends AbstractModel implements UnbakedModel {
      * Initializes the mesh for any CardModel instance.
      */
     private static final ItemQuadEmitter MESH_INIT_EMITTER = (model,stack,random,ctx) -> {
-        Identifier card_id = new Identifier(model.def.card_face().getNamespace(), model.def.card_face().getPath().replace("textures/", "").replace(".png", ""));
-        
+        Identifier card_id = new Identifier(model.def.card_icon().getNamespace(), model.def.card_icon().getPath().replace("textures/", "").replace(".png", ""));
         model.CARD_FACE_SPRITE = ModInitClient.getCardSprite(card_id);
         model.ICON_SPRITE = ModInitClient.getCardSprite(model.def.sprite_icon());
         MeshBuilder builder = RendererAccess.INSTANCE.getRenderer().meshBuilder();

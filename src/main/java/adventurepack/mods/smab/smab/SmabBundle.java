@@ -7,6 +7,7 @@ import adventurepack.mods.smab.minecraft.entity.SmabEntityModel;
 import adventurepack.mods.smab.minecraft.entity.SmabEntityRenderer;
 import adventurepack.mods.smab.minecraft.items.CardItem;
 import adventurepack.mods.smab.minecraft.items.SmabCardItem;
+import adventurepack.mods.smab.resourceloaders.SmabLoader;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;

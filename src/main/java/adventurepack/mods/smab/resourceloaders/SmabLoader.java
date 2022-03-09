@@ -1,4 +1,4 @@
-package adventurepack.mods.smab;
+package adventurepack.mods.smab.resourceloaders;
 
 import java.io.File;
 import java.io.FileReader;

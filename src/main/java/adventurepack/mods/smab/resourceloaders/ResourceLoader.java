@@ -1,4 +1,4 @@
-package adventurepack.mods.smab;
+package adventurepack.mods.smab.resourceloaders;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -6,13 +6,16 @@ import java.util.concurrent.Executor;
 
 import com.google.common.collect.Sets;
 
+import adventurepack.mods.smab.ModInit;
+import adventurepack.mods.smab.ModInitClient;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 
-final class ResourceLoader implements IdentifiableResourceReloadListener {
+public final class ResourceLoader implements IdentifiableResourceReloadListener {
     @Override
     public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager,
             Profiler prepareProfiler, Profiler applyProfiler, Executor prepareExecutor,
@@ -28,8 +31,15 @@ final class ResourceLoader implements IdentifiableResourceReloadListener {
                 ids.add(new Identifier(id.getNamespace(), id.getPath().replace("textures/", "").replace(".png", "")));
             });
 
+            CardTextures.SPRITES.addAll(ids);
+            CardTextures.init(manager);
+
             ClientSpriteRegistryCallback.event(ModInitClient.BLOCK_ATLAS_TEXTURE).register((atlas,registry) -> {
                 ids.forEach(registry::register);
+            });
+
+            ClientSpriteRegistryCallback.event(CardTextures.CARD_ATLAS_ID).register((atlas,reg) -> {
+                ids.forEach(reg::register);
             });
         }, applyExecutor).thenCompose(synchronizer::whenPrepared);
     }

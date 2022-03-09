@@ -1,4 +1,4 @@
-package adventurepack.mods.smab;
+package adventurepack.mods.smab.resourceloaders;
 
 import java.io.File;
 import java.io.FileReader;
@@ -33,7 +33,7 @@ public class ItemLoader {
             JsonElement ele = JsonParser.parseReader(NoEx.run(()->new FileReader(item)));
             JsonItemDefinition def = AutoJson.deserialize(JsonItemDefinition.class, ele);
             if (!Registry.ITEM.containsId(def.id())) {
-                CardItem cardItem = Registry.register(Registry.ITEM, def.id(), new CardItem(def.rarity(), def.card_face().getPath().replace("textures/cards/", "").replace("_card.png", "")));
+                CardItem cardItem = Registry.register(Registry.ITEM, def.id(), new CardItem(def.rarity(), def.card_icon().getPath().replace("textures/cards/", "").replace("_card.png", "")));
                 LOADED_ITEMS.add(cardItem);
             }
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
