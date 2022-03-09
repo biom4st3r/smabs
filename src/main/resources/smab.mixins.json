@@ -7,7 +7,8 @@
   "client": [
     "client/ScreenMixin",
     "client/TexturedRenderLayersMxn",
-    "SpriteAtlasTextureAccessor"
+    "SpriteAtlasTextureAccessor",
+    "client/ItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

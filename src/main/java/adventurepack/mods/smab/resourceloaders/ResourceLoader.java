@@ -31,16 +31,12 @@ public final class ResourceLoader implements IdentifiableResourceReloadListener 
                 ids.add(new Identifier(id.getNamespace(), id.getPath().replace("textures/", "").replace(".png", "")));
             });
 
-            CardTextures.SPRITES.addAll(ids);
-            CardTextures.init(manager);
+            // TextureLoader.init(manager, ids);
 
             ClientSpriteRegistryCallback.event(ModInitClient.BLOCK_ATLAS_TEXTURE).register((atlas,registry) -> {
                 ids.forEach(registry::register);
             });
 
-            ClientSpriteRegistryCallback.event(CardTextures.CARD_ATLAS_ID).register((atlas,reg) -> {
-                ids.forEach(reg::register);
-            });
         }, applyExecutor).thenCompose(synchronizer::whenPrepared);
     }
 
