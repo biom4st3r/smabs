@@ -64,14 +64,11 @@ public class CardModel extends AbstractModel implements UnbakedModel {
             RenderContext context);
     }
 
-    
-
     /**
      * Initializes the mesh for any CardModel instance.
      */
     private static final ItemQuadEmitter MESH_INIT_EMITTER = (model,stack,random,ctx) -> {
-        Identifier card_id = new Identifier(model.def.card_icon().getNamespace(), model.def.card_icon().getPath().replace("textures/", "").replace(".png", ""));
-        // Identifier card_id = new Identifier("ap_smabs:cards/integral_interior_card");
+        Identifier card_id = new Identifier(model.def.card_face().getNamespace(), model.def.card_face().getPath().replace("textures/", "").replace(".png", ""));
         
         model.CARD_FACE_SPRITE = ModInitClient.getCardSprite(card_id);
         model.ICON_SPRITE = ModInitClient.getCardSprite(model.def.sprite_icon());

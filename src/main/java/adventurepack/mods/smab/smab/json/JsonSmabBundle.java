@@ -5,11 +5,11 @@ import com.google.common.collect.Sets;
 
 import adventurepack.mods.smab.ModInit;
 import adventurepack.mods.smab.minecraft.entity.SmabEntity;
-import adventurepack.mods.smab.smab.Ability;
-import adventurepack.mods.smab.smab.BetterTag;
-import adventurepack.mods.smab.smab.LevelAlgorithm;
 import adventurepack.mods.smab.smab.SmabBundle;
 import adventurepack.mods.smab.smab.SmabSpecies;
+import adventurepack.mods.smab.smab.attributes.Ability;
+import adventurepack.mods.smab.smab.attributes.BetterTag;
+import adventurepack.mods.smab.smab.attributes.LevelAlgorithm;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;

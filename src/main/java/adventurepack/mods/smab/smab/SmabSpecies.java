@@ -3,6 +3,10 @@ package adventurepack.mods.smab.smab;
 import java.util.Map;
 import java.util.Set;
 
+import adventurepack.mods.smab.smab.attributes.Ability;
+import adventurepack.mods.smab.smab.attributes.BetterTag;
+import adventurepack.mods.smab.smab.attributes.DietaryEffect;
+import adventurepack.mods.smab.smab.attributes.LevelAlgorithm;
 import net.minecraft.item.Item;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;

@@ -23,25 +23,9 @@ import net.minecraft.util.registry.Registry;
 public class ItemLoader {
     public static Set<Item> LOADED_ITEMS = Sets.newHashSet();
     
-    public static Map<Identifier, JsonItemDefinition> MAP = Maps.newHashMap();
+    public static Map<Identifier, JsonItemDefinition> NEEDS_MODEL = Maps.newHashMap();
 
     public static void init() {
-        // FileWrapper.of("config/smab_card_items/")
-        //     .wrappedStream()
-        //     .withValue(stream -> {
-        //         stream.forEach(file -> {
-        //             file.readerAdapter(reader -> AutoJson.deserialize(JsonItemDefinition.class, JsonParser.parseReader(reader)))
-        //                 .withValue(def -> {
-        //                     CardItem cardItem = Registry.register(Registry.ITEM, def.id(), new CardItem(def.rarity(), def.card_icon().getPath().replace("textures/cards/", "").replace("_card.png", "")));
-        //                     if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-        //                         MAP.put(def.id(), def);
-        //                     }
-        //                     LOADED_ITEMS.add(cardItem);
-        //                 });
-        //         });
-        //     });
-
-
         File dir = new File("config/smab_card_items/");
         dir.mkdirs();
         File[] files = dir.listFiles();
@@ -49,11 +33,11 @@ public class ItemLoader {
             JsonElement ele = JsonParser.parseReader(NoEx.run(()->new FileReader(item)));
             JsonItemDefinition def = AutoJson.deserialize(JsonItemDefinition.class, ele);
             if (!Registry.ITEM.containsId(def.id())) {
-                CardItem cardItem = Registry.register(Registry.ITEM, def.id(), new CardItem(def.rarity(), def.card_icon().getPath().replace("textures/cards/", "").replace("_card.png", "")));
+                CardItem cardItem = Registry.register(Registry.ITEM, def.id(), new CardItem(def.rarity(), def.card_face().getPath().replace("textures/cards/", "").replace("_card.png", "")));
                 LOADED_ITEMS.add(cardItem);
             }
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-                MAP.put(def.id(), def);
+                NEEDS_MODEL.put(def.id(), def);
             }
         }
     }

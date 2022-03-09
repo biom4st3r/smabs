@@ -1,9 +1,9 @@
 package adventurepack.mods.smab;
 
-import adventurepack.mods.smab.smab.Ability;
-import adventurepack.mods.smab.smab.LevelAlgorithm;
 import adventurepack.mods.smab.smab.Smab;
 import adventurepack.mods.smab.smab.SmabBundle;
+import adventurepack.mods.smab.smab.attributes.Ability;
+import adventurepack.mods.smab.smab.attributes.LevelAlgorithm;
 import biom4st3r.libs.biow0rks.autojson.AutoJson;
 import biom4st3r.libs.biow0rks.autonbt.AutoNbt;
 import net.minecraft.entity.attribute.EntityAttribute;

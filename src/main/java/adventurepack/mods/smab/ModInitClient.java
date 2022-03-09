@@ -11,6 +11,8 @@ import adventurepack.mods.smab.minecraft.client.itemodel.CardModel;
 import adventurepack.mods.smab.minecraft.client.itemodel.JsonItemDefinition;
 import adventurepack.mods.smab.minecraft.items.SmabCardItem;
 import adventurepack.mods.smab.smab.Smab;
+import adventurepack.mods.smab.smab.SmabBundle;
+import adventurepack.mods.smab.smab.attributes.BetterTag;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
@@ -63,10 +65,25 @@ public class ModInitClient implements ClientModInitializer {
 
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(manager -> (modelId, context) -> {
             Identifier id = new Identifier(modelId.getNamespace(), modelId.getPath());
-            JsonItemDefinition def = ItemLoader.MAP.get(id);
+            JsonItemDefinition def = ItemLoader.NEEDS_MODEL.get(id);
             if (def != null) {
-                ItemLoader.MAP.remove(id);
+                ItemLoader.NEEDS_MODEL.remove(id);
                 return new CardModel(def);
+            }
+            return null;
+        });
+
+        ModelLoadingRegistry.INSTANCE.registerVariantProvider(manager -> (modelId, context) -> {
+            Identifier id = new Identifier(modelId.getNamespace(), modelId.getPath());
+            SmabBundle bundle = SmabLoader.NEEDS_MODEL.get(id);
+            if (bundle != null) {
+                SmabLoader.NEEDS_MODEL.remove(id);
+                return new CardModel( // smab species item creation
+                    new JsonItemDefinition(
+                        bundle.species().id(), 
+                        BetterTag.getRarity(bundle.species().tags()), 
+                        new Identifier("ap_smabs:textures/cards/famous_foodstuff_card.png"),
+                        new Identifier(ModInit.MODID, "smab_icons/" + id.getPath())));
             }
             return null;
         });

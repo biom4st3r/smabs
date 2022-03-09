@@ -5,8 +5,8 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 import adventurepack.mods.smab.ModInit;
-import adventurepack.mods.smab.smab.BetterTag;
 import adventurepack.mods.smab.smab.SmabSpecies;
+import adventurepack.mods.smab.smab.attributes.BetterTag;
 import net.minecraft.item.Item;
 import net.minecraft.util.Rarity;
 

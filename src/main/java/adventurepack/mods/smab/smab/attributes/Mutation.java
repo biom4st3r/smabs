@@ -1,4 +1,4 @@
-package adventurepack.mods.smab.smab;
+package adventurepack.mods.smab.smab.attributes;
 
 public record Mutation(float intelligence, float strength, float dexterity, float vitarlity) {
     public static Mutation create(long l) { // TODO

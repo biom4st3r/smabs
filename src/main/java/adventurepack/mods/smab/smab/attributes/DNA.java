@@ -1,4 +1,4 @@
-package adventurepack.mods.smab.smab;
+package adventurepack.mods.smab.smab.attributes;
 
 import java.util.Random;
 

@@ -1,10 +1,10 @@
 package adventurepack.mods.smab;
 
-import adventurepack.mods.smab.smab.Ability;
-import adventurepack.mods.smab.smab.BetterTag;
-import adventurepack.mods.smab.smab.DietaryEffect;
-import adventurepack.mods.smab.smab.LevelAlgorithm;
 import adventurepack.mods.smab.smab.SmabBundle;
+import adventurepack.mods.smab.smab.attributes.Ability;
+import adventurepack.mods.smab.smab.attributes.BetterTag;
+import adventurepack.mods.smab.smab.attributes.DietaryEffect;
+import adventurepack.mods.smab.smab.attributes.LevelAlgorithm;
 import adventurepack.mods.smab.smab.json.JsonDietaryPair;
 import adventurepack.mods.smab.smab.json.JsonEntityAttributeBundle;
 import adventurepack.mods.smab.smab.json.JsonSmabBundle;

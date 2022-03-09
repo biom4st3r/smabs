@@ -3,9 +3,9 @@ package adventurepack.mods.smab;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import adventurepack.mods.smab.smab.Ability;
-import adventurepack.mods.smab.smab.LevelAlgorithm;
 import adventurepack.mods.smab.smab.SmabBundle;
+import adventurepack.mods.smab.smab.attributes.Ability;
+import adventurepack.mods.smab.smab.attributes.LevelAlgorithm;
 import biom4st3r.libs.biow0rks.BioLogger;
 import net.minecraft.util.Identifier;
 

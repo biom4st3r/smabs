@@ -7,6 +7,11 @@ import com.google.common.base.Preconditions;
 
 import adventurepack.mods.smab.Registries;
 import adventurepack.mods.smab.component.SmabItemComponent;
+import adventurepack.mods.smab.smab.attributes.Ability;
+import adventurepack.mods.smab.smab.attributes.BetterTag;
+import adventurepack.mods.smab.smab.attributes.DNA;
+import adventurepack.mods.smab.smab.attributes.DietaryEffect;
+import adventurepack.mods.smab.smab.attributes.LevelAlgorithm;
 import biom4st3r.libs.biow0rks.autonbt.AutoNbt;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;

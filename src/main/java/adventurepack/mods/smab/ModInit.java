@@ -38,7 +38,6 @@ public class ModInit implements ModInitializer {
 		ItemLoader.init();
 
 		TEMPLATE = Registry.register(Registry.ITEM, new Identifier(MODID, "templatinggui"), new GuiItem());
-
 	}
 
 	@SuppressWarnings({"unused"})
